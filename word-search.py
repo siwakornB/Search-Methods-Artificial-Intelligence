@@ -8,7 +8,7 @@ from word_search_puzzle.utils import display_panel
 from word_search_puzzle.algorithms import create_panel
 
 pygame.font.init()
-myfont = pygame.font.SysFont("comicsans",30)
+myfont = pygame.font.SysFont("comicsans",40)
 
 
 BLACK = (0, 0, 0)
@@ -42,15 +42,16 @@ class DFS():
         else:
             self.run = False
         print('Root' + ':' + table[self.rootx][self.rooty])
+        self.redraw()
 
     def search(self):
         print('x =',self.x,'y = ',self.y,'dir = ',self.dir)
-        self.redraw()
         if(self.x >= 0 and self.x <= 9):
             if (self.y >= 0 and self.y <= 9):
                 print(self.directory[self.dir] + ':' + table[self.x][self.y])
                 self.string = self.string + table[self.x][self.y]
                 print(self.string)
+                self.redraw()
                 if self.string in words:
                     print("------------------------------------------------------")
                     self.path.append(self.string)
@@ -66,20 +67,25 @@ class DFS():
                 elif (self.dir == 3):
                     #search(PosX + 1, PosY+1, string, dir, position)
                     self.x =  self.x+1
+                
             else:
-                self.dir += 1
+                self.dir += 1 
+                if(self.dir > 3):
+                    self.dir = 0
+                    self.nextRoot()
                 self.x,self.y = self.rootx,self.rooty
                 self.string = ''
         else:
             self.dir += 1
+            if(self.dir > 3):
+                    self.dir = 0
+                    self.nextRoot()
             self.x,self.y = self.rootx,self.rooty
             self.string = ''
-        if(self.dir > 3):
-            self.dir = 0
-            self.nextRoot()
 
     def circle(self):
-        pygame.draw.circle(SCREEN, (0,255,0), (self.y*blockSize+blockSize//4,self.x*blockSize+blockSize//4+5), blockSize//4,2)
+        pygame.draw.circle(SCREEN, (0,0,255), (self.rooty*blockSize+blockSize//4+2,self.rootx*blockSize+blockSize//4+5), blockSize//4,2)
+        pygame.draw.circle(SCREEN, (0,255,0), (self.y*blockSize+blockSize//4+2,self.x*blockSize+blockSize//4+5), blockSize//4,2)
 
     
     def redraw(self):
