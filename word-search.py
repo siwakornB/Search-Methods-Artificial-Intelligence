@@ -20,6 +20,18 @@ SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Test")
 
 blockSize = 80 #Set the size of the grid block
+table = [['C','O','N','N','E','C','T','I','O','N'],
+            ['F','C','E','L','L','P','H','O','N','E'],
+            ['A','R','Z','T','S','P','E','E','C','H'],
+            ['C','B','T','M','A','L','U','J','G','G'],
+            ['I','A','L','I','F','I','U','G','B','I'],
+            ['A','S','E','N','I','H','C','A','M','P'],
+            ['L','L','H','P','B','E','J','O','S','H'],
+            ['K','R','G','R','J','S','I','R','I','O'],
+            ['M','G','Z','D','E','E','P','S','M','N'],
+            ['D','I','N','T','E','R','N','E','T','E'] ]
+words = ['AI','facial','speed','speech','connection','internet',
+            'iphone','siri','cellphone','machines']
 
 class DFS():
     def __init__(self):
@@ -34,13 +46,14 @@ class DFS():
         self.path = []  #in case of highlighting word
     
     def nextRoot(self):
-        if(self.y < 9):
+        if(self.rooty < 9):
             self.rooty += 1
-        elif(self.x < 9):
+        elif(self.rootx < 9):
             self.rooty = 0
             self.rootx += 1
         else:
             self.run = False
+            
         print('Root' + ':' + table[self.rootx][self.rooty])
         self.redraw()
 
@@ -100,14 +113,13 @@ def main():
     CLOCK = pygame.time.Clock()
     timer = pygame.time.get_ticks()
 
-    puzzle_gen()
     dfs = DFS()
 
     while True:
         CLOCK.tick(FPS)
         t = pygame.time.get_ticks() - timer
         #print(t)
-        if( t > 300):
+        if( dfs.run):
             dfs.search()
             timer = pygame.time.get_ticks()
         
