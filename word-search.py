@@ -6,6 +6,8 @@ import time
 #import puzzel generetor
 from word_search_puzzle.utils import display_panel
 from word_search_puzzle.algorithms import create_panel
+#for memory tracer
+import tracemalloc
 
 pygame.font.init()
 myfont = pygame.font.SysFont("comicsans",40)
@@ -30,8 +32,9 @@ table = [['C','O','N','N','E','C','T','I','O','N'],
             ['K','R','G','R','J','S','I','R','I','O'],
             ['M','G','Z','D','E','E','P','S','M','N'],
             ['D','I','N','T','E','R','N','E','T','E'] ]
-words = ['AI','FACIAL','SPEECH','CONNECTION','INTERNET',
-            'IPHONE','SIRI','CELLPHONE',]               #'MACHINES','SPEED'
+WORDS = ['AI','FACIAL','SPEECH','CONNECTION','INTERNET',
+            'IPHONE','SIRI','CELLPHONE',]#'MACHINES','SPEED'
+words = WORDS.copy()               
 visited = []
 
 class DFS():
@@ -45,6 +48,9 @@ class DFS():
         self.dir = 0 #0-3 for directory
         self.directory = ['NorthEast','East','SouthEast','South']
         self.path = []  #in case of highlighting word
+        self.CurrentMem = 0
+        self.PeakMem = 0
+        self.Timeconsumption = 0
     
     def nextRoot(self):
         if(self.rooty < 9):
@@ -123,20 +129,40 @@ def main():
     FPS = 60
     CLOCK = pygame.time.Clock()
     timer = pygame.time.get_ticks()
-
     dfs = DFS()
+    GAME = True
+    global globalCurrentMem, globalPeakMem,Timeconsumption
+    globalPeakMem = 0
+    avg = []
 
-    while True:
+    starttime = pygame.time.get_ticks()
+    tracemalloc.start()
+    while GAME:
         CLOCK.tick(FPS)
         t = pygame.time.get_ticks() - timer
         #print(t)
+
         if(dfs.run):
             dfs.search()
             timer = pygame.time.get_ticks()
+            CurrentMem, PeakMem = tracemalloc.get_traced_memory()
+            if(len(avg) <= 80):
+                avg.append(CurrentMem)
+            else:
+                avg.pop(0)
+                avg.append(CurrentMem)
+            if(PeakMem > dfs.PeakMem):
+                dfs.PeakMem = PeakMem
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                #pygame.quit()
+                GAME = False
+                dfs.Timeconsumption = (pygame.time.get_ticks() - starttime)/1000
+                dfs.CurrentMem = sum(avg)/len(avg)
+                print(f'mem : {dfs.CurrentMem} bytes peak : {dfs.PeakMem} bytes Total Time :{dfs.Timeconsumption} s')
+    tracemalloc.stop()
+    
 
 def drawGrid():
     for x in range(10):
@@ -157,49 +183,6 @@ def puzzle_gen():
     for i in range(0,10):
         for j in range(0, 10):
             table[i][j] = result.get('panel').cells[i,j]
-    
 
-
-def s():
-    for i in range(0,5):
-        for j in range(0, 5):
-            print('Root:',i,j)
-            DFS(i,j,"")
-
-#initial search
-def DFStt(PosX,PosY,string):
-    position = ""
-    print("NorthEast: ", end="")
-    #search(PosX, PosY, string, 'NorthEast', position)
-    state.append(PosX, PosY, string, 'NorthEast', position)
-    print()
-    print("East: ",end="")
-    #search(PosX,PosY,string,'East', position)
-    print()
-    print("SouthEast: ", end="")
-    #search(PosX,PosY,string,'SouthEast', position)
-    print()
-    print("South: ", end="")
-    #search(PosX,PosY,string,'South', position)
-    print()
-    
-#recursion
-def searchtt(PosX,PosY,string,dir,position):
-    if(PosX >= 0 and PosX <= 4):
-        if (PosY >= 0 and PosY <= 4):
-            #print(table[PosX][PosY], end=" ")
-            string = string + table[PosX][PosY]
-            print(string)
-            redraw(PosX,PosY)
-            if string in words:
-                print("------------------------------------------------------")
-            if (dir == 'NorthEast'):
-                search(PosX-1, PosY+1, string, dir, position)
-            if (dir == 'East'):
-                search(PosX, PosY+1, string, dir, position)
-            if (dir == 'South'):
-                search(PosX+1, PosY, string, dir, position)
-            if (dir == 'SouthEast'):
-                search(PosX + 1, PosY+1, string, dir, position)
 
 main()
