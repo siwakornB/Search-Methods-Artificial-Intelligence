@@ -16,11 +16,11 @@ myfont = pygame.font.SysFont("comicsans",40)
 BLACK = (0, 0, 0)
 WHITE = (200, 200, 200)
 
-WIDTH,HEIGHT = 1000,800
+WIDTH,HEIGHT = 1366,768
 SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Test")
 
-blockSize = 80 #Set the size of the grid block
+blockSize = 40 #Set the size of the grid block
 table = [['C','O','N','N','E','C','T','I','O','N'],
             ['F','C','E','L','L','P','H','O','N','E'],
             ['A','R','Z','T','S','P','E','E','C','H'],
@@ -127,10 +127,15 @@ class DFS():
         self.Timeconsumption = 0
         self.avg.clear()
 
+        StartResetButton = pygame.Rect((WIDTH*2/7)+200, HEIGHT*4/5, 100, 50)
+        pygame.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
 
 def main():
     global myfont
     global InputBox_status
+    
+    
+    StartResetButton_status = 'start'  
 
     InputBox_status = True
 
@@ -139,18 +144,24 @@ def main():
     timer = pygame.time.get_ticks()
 
     #define button
-    start_button = pygame.Rect(800, 200, 200, 100)
-    reset_button = pygame.Rect(800, 600, 200, 100)
+    # start_button = pygame.Rect(WIDTH*2/7, HEIGHT*4/5, 100, 50)
+    # reset_button = pygame.Rect((WIDTH*2/7)+200, HEIGHT*4/5, 100, 50)
+    StartResetButton = pygame.Rect((WIDTH*2/7)+200, HEIGHT*4/5, 100, 50)
 
     #define input box
-    input_box = pygame.Rect(800, 400, 140, 32)
+    input_box = pygame.Rect((WIDTH*2/7)+400, (HEIGHT*4/5), 100, 50)
     color_inactive = pygame.Color('lightskyblue3')
     color_active = pygame.Color('dodgerblue2')
     color = color_inactive
     active = False
     text = ''
     #--------------
-    
+
+    #define text 'Delay: '
+    text_delay = myfont.render('Delay:', True, (255,255,0)) 
+    textRect = text_delay.get_rect()  
+    textRect.center = ((WIDTH*2/7)+350,HEIGHT*4/5+25) 
+
     dfs = DFS()
     GAME = True
     global globalCurrentMem, globalPeakMem,Timeconsumption
@@ -213,6 +224,32 @@ def main():
                         words = WORDS.copy()
                         visited.clear()
                         InputBox_status = True
+                    if StartResetButton.collidepoint(event.pos):
+                        if StartResetButton_status == 'start':
+                            start_status = 1
+                            InputBox_status = 1
+                            print(StartResetButton_status)
+                            StartResetButton_status = 'reset'
+                        elif StartResetButton_status == 'reset':
+                            SCREEN.fill(BLACK)
+                            start_status = 0
+                            words = WORDS.copy()
+                            visited.clear()
+                            InputBox_status = 0
+                            StartResetButton_status = 'reset'
+                            main()
+                    # if start_button.collidepoint(event.pos):
+                    #     print("-------------------------------------------------------------------")
+                    #     start_status = 1
+                    #     InputBox_status = 1
+                    # if reset_button.collidepoint(event.pos):
+                    #     print("-------------------------------------------------------------------")
+                    #     SCREEN.fill(BLACK)
+                    #     start_status = 0
+                    #     words = WORDS.copy()
+                    #     visited.clear()
+                    #     InputBox_status = 0
+                    #     main()
                     if input_box.collidepoint(event.pos):
                         active = not active
                     else:
@@ -229,6 +266,26 @@ def main():
                     else:
                         text += event.unicode
                         #print(text)
+        SCREEN.fill(BLACK)
+        drawGrid()
+        if(start_status == 1):
+            if(dfs.run):
+                dfs.search()  
+                timer = pygame.time.get_ticks()
+        # pygame.draw.rect(SCREEN, (255, 255, 0), start_button)
+        # pygame.draw.rect(SCREEN, (255,0,0), reset_button)
+        pygame.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
+        # print(text)
+        if InputBox_status == 0:
+            txt_surface = myfont.render(text, True, color)
+            width = max(200, txt_surface.get_width()+10)
+            input_box.w = width
+            SCREEN.blit(txt_surface, (input_box.x+5, input_box.y+5))
+            pygame.draw.rect(SCREEN, color, input_box, 2)
+        SCREEN.blit(text_delay, textRect) 
+        
+        
+        pygame.display.update()
 
                 
     tracemalloc.stop()
