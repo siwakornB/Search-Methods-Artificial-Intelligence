@@ -93,7 +93,7 @@ def IDDFS(row,column,string,tmp_round,last_round):
         print('round: ', last_round)
         print('level: ', level, ' row: ', row, ' column: ', column)
         if(column !=4 and row != 0):
-            print("\n-NorthEast: ")
+            print("\n-NorthEast: ") 
             IDDFSSearch(row, column, string, 'NorthEast', tmp_round, last_round)
         if(column != 4):
             print("\n-East: ")
