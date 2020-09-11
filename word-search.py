@@ -16,6 +16,7 @@ WHITE = (200, 200, 200)
 
 start_status = 0
 reset_status = 0
+InputBox_status = 0
 
 WIDTH,HEIGHT = 1000,800
 SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
@@ -132,14 +133,26 @@ def main():
     global reset_status
     global words
     global WORDS
+    global myfont
+    global InputBox_status
+
     FPS = 60
     CLOCK = pygame.time.Clock()
     timer = pygame.time.get_ticks()
 
+    #define button
     start_button = pygame.Rect(800, 200, 200, 100)
     reset_button = pygame.Rect(800, 600, 200, 100)
 
-    drawGrid()
+    #define input box
+    input_box = pygame.Rect(800, 400, 140, 32)
+    color_inactive = pygame.Color('lightskyblue3')
+    color_active = pygame.Color('dodgerblue2')
+    color = color_inactive
+    active = False
+    text = ''
+    #--------------
+
     dfs = DFS()
 
     while True:
@@ -153,28 +166,57 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                # 1 is the left mouse button, 2 is middle, 3 is right.
-                if event.button == 1:
-                    # `event.pos` is the mouse position.
+            elif event.type == pygame.MOUSEBUTTONDOWN:          #button click
+                if event.button == 1:                           #1 is the left mouse button, 2 is middle, 3 is right.
                     if start_button.collidepoint(event.pos):
                         print("-------------------------------------------------------------------")
                         start_status = 1
+                        InputBox_status = 1
                     if reset_button.collidepoint(event.pos):
                         print("-------------------------------------------------------------------")
                         SCREEN.fill(BLACK)
                         start_status = 0
-                        # reset_status = 1
-                                      #'MACHINES','SPEED'
                         words = WORDS.copy()
                         visited.clear()
+                        InputBox_status = 0
                         main()
+                    if input_box.collidepoint(event.pos):
+                        active = not active
+                    else:
+                        active = False
+                    color = color_active if active else color_inactive
+            elif event.type == pygame.KEYDOWN:
+                if InputBox_status == 0:
+                    if event.key == pygame.K_RETURN:
+                        #print(text)
+                        text = ''
+                    if event.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                        #print(text)
+                        InputBox_status = 0
+                    else:
+                        text += event.unicode
+                        #print(text)
+        SCREEN.fill(BLACK)
+        drawGrid()
         if(start_status == 1):
             if(dfs.run):
                 dfs.search()  
                 timer = pygame.time.get_ticks()
         pygame.draw.rect(SCREEN, (255, 255, 0), start_button)
         pygame.draw.rect(SCREEN, (255,0,0), reset_button)
+        # print(text)
+        if InputBox_status == 0:
+            txt_surface = myfont.render(text, True, color)
+        # Resize the box if the text is too long.
+            width = max(200, txt_surface.get_width()+10)
+            input_box.w = width
+        # Blit the text.
+            SCREEN.blit(txt_surface, (input_box.x+5, input_box.y+5))
+        # Blit the input_box rect.
+            pygame.draw.rect(SCREEN, color, input_box, 2)
+        
+        
         pygame.display.update()
 
 def drawGrid():
@@ -197,48 +239,4 @@ def puzzle_gen():
         for j in range(0, 10):
             table[i][j] = result.get('panel').cells[i,j]
     
-
-
-def s():
-    for i in range(0,5):
-        for j in range(0, 5):
-            print('Root:',i,j)
-            DFS(i,j,"")
-
-#initial search
-def DFStt(PosX,PosY,string):
-    position = ""
-    print("NorthEast: ", end="")
-    #search(PosX, PosY, string, 'NorthEast', position)
-    state.append(PosX, PosY, string, 'NorthEast', position)
-    print()
-    print("East: ",end="")
-    #search(PosX,PosY,string,'East', position)
-    print()
-    print("SouthEast: ", end="")
-    #search(PosX,PosY,string,'SouthEast', position)
-    print()
-    print("South: ", end="")
-    #search(PosX,PosY,string,'South', position)
-    print()
-    
-#recursion
-def searchtt(PosX,PosY,string,dir,position):
-    if(PosX >= 0 and PosX <= 4):
-        if (PosY >= 0 and PosY <= 4):
-            #print(table[PosX][PosY], end=" ")
-            string = string + table[PosX][PosY]
-            print(string)
-            redraw(PosX,PosY)
-            if string in words:
-                print("------------------------------------------------------")
-            if (dir == 'NorthEast'):
-                search(PosX-1, PosY+1, string, dir, position)
-            if (dir == 'East'):
-                search(PosX, PosY+1, string, dir, position)
-            if (dir == 'South'):
-                search(PosX+1, PosY, string, dir, position)
-            if (dir == 'SouthEast'):
-                search(PosX + 1, PosY+1, string, dir, position)
-
 main()
