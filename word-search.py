@@ -14,8 +14,10 @@ myfont = pygame.font.SysFont("comicsans",40)
 BLACK = (0, 0, 0)
 WHITE = (200, 200, 200)
 
+start_status = 0
+reset_status = 0
 
-WIDTH,HEIGHT = 800,800
+WIDTH,HEIGHT = 1000,800
 SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Test")
 
@@ -30,8 +32,9 @@ table = [['C','O','N','N','E','C','T','I','O','N'],
             ['K','R','G','R','J','S','I','R','I','O'],
             ['M','G','Z','D','E','E','P','S','M','N'],
             ['D','I','N','T','E','R','N','E','T','E'] ]
-words = ['AI','FACIAL','SPEECH','CONNECTION','INTERNET',
+WORDS = ['AI','FACIAL','SPEECH','CONNECTION','INTERNET',
             'IPHONE','SIRI','CELLPHONE',]               #'MACHINES','SPEED'
+words = WORDS.copy()
 visited = []
 
 class DFS():
@@ -115,28 +118,64 @@ class DFS():
     def redraw(self):
         SCREEN.fill(BLACK)
         drawGrid()
+        start_button = pygame.Rect(800, 200, 200, 100)
+        reset_button = pygame.Rect(800, 600, 200, 100)
+
+        pygame.draw.rect(SCREEN, (255, 255, 0), start_button)
+        pygame.draw.rect(SCREEN, (255,0,0), reset_button)
         self.circle()
 
         pygame.display.update()
 
 def main():
+    global start_status
+    global reset_status
+    global words
+    global WORDS
     FPS = 60
     CLOCK = pygame.time.Clock()
     timer = pygame.time.get_ticks()
 
+    start_button = pygame.Rect(800, 200, 200, 100)
+    reset_button = pygame.Rect(800, 600, 200, 100)
+
+    drawGrid()
     dfs = DFS()
 
     while True:
         CLOCK.tick(FPS)
         t = pygame.time.get_ticks() - timer
         #print(t)
-        if(dfs.run):
-            dfs.search()
-            timer = pygame.time.get_ticks()
+        # if(dfs.run):
+        #     dfs.search()
+        #     timer = pygame.time.get_ticks()
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # 1 is the left mouse button, 2 is middle, 3 is right.
+                if event.button == 1:
+                    # `event.pos` is the mouse position.
+                    if start_button.collidepoint(event.pos):
+                        print("-------------------------------------------------------------------")
+                        start_status = 1
+                    if reset_button.collidepoint(event.pos):
+                        print("-------------------------------------------------------------------")
+                        SCREEN.fill(BLACK)
+                        start_status = 0
+                        # reset_status = 1
+                                      #'MACHINES','SPEED'
+                        words = WORDS.copy()
+                        visited.clear()
+                        main()
+        if(start_status == 1):
+            if(dfs.run):
+                dfs.search()  
+                timer = pygame.time.get_ticks()
+        pygame.draw.rect(SCREEN, (255, 255, 0), start_button)
+        pygame.draw.rect(SCREEN, (255,0,0), reset_button)
+        pygame.display.update()
 
 def drawGrid():
     for x in range(10):
