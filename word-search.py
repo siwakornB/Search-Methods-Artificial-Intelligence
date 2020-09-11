@@ -37,7 +37,7 @@ WORDS = ['AI','FACIAL','SPEECH','CONNECTION','INTERNET',
 words = WORDS.copy() 
 visited = []
 
-class DFS():
+class DFS():        #depth first search
     def __init__(self):
         self.run = False #initial with running state
         self.rootx = 0 #just for keeping root
@@ -53,9 +53,6 @@ class DFS():
         self.Timeconsumption = 0
         self.avg = []
         
-        self.start_button = pygame.Rect(800, 200, 200, 100)
-        self.reset_button = pygame.Rect(800, 600, 200, 100)
-    
     def nextRoot(self):
         if(self.rooty < 9):
             self.rooty += 1
@@ -108,8 +105,8 @@ class DFS():
             self.string = ''
 
     def circle(self):
-        pygame.draw.circle(SCREEN, (0,0,255), (self.rooty*blockSize+blockSize//4+2,self.rootx*blockSize+blockSize//4+5), blockSize//4,2)
-        pygame.draw.circle(SCREEN, (0,255,0), (self.y*blockSize+blockSize//4+2,self.x*blockSize+blockSize//4+5), blockSize//4,2)
+        pygame.draw.circle(SCREEN, (0,0,255), (self.rooty*blockSize+blockSize//2+2,self.rootx*blockSize+blockSize//2+5), blockSize//2,2)
+        pygame.draw.circle(SCREEN, (0,255,0), (self.y*blockSize+blockSize//2+2,self.x*blockSize+blockSize//2+5), blockSize//2,2)
   
     def reset(self):
         self.run = False
@@ -126,17 +123,108 @@ class DFS():
         self.PeakMem = 0
         self.Timeconsumption = 0
         self.avg.clear()
+        
+        StartResetButton_status = False
+        
 
-        StartResetButton = pygame.Rect((WIDTH*2/7)+200, HEIGHT*4/5, 100, 50)
-        pygame.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
+class IDDFS():       #iterative deepening depth first search
+    def __init__(self):
+        self.run = False #initial with running state
+        self.rootx = 0 #just for keeping root
+        self.rooty = 0
+        self.x = 0  #for keeping recent search
+        self.y = 0
+        self.string = ''
+        self.dir = 0 #0-3 for directory
+        self.directory = ['NorthEast','East','SouthEast','South']
+        self.path = []  #in case of highlighting word
+        self.CurrentMem = 0
+        self.PeakMem = 0
+        self.Timeconsumption = 0
+        self.avg = []
+        self.temp_level = 0
+        self.max_level = 1
+        
+    def nextRoot(self):
+        if(self.rooty < 9):
+            self.rooty += 1
+        elif(self.rootx < 9):
+            self.rooty = 0
+            self.rootx += 1
+        else:
+            self.run = False
+            
+        print('Root' + ':' + table[self.rootx][self.rooty])
+
+    def search(self):
+        print('temp',self.temp_level,'max',self.max_level)
+        
+        print(self.directory[self.dir])
+        self.string = self.string + table[self.x][self.y]
+        #print(self.string)
+        if self.string in words:
+            print("------------------------------------------------------")
+            self.path.append(self.string)
+            words.remove(self.string)
+            visited.append(self.string)
+            print(visited)
+            self.dir += 1 
+            if(self.dir > 3):
+                self.dir = 0
+                self.nextRoot()
+            self.x,self.y = self.rootx,self.rooty
+            self.string = ''
+        if(len(words) <= 0):
+            self.reset()
+        if (self.dir == 0 ):
+            #search(PosX-1, PosY+1, string, dir, position)
+            self.x,self.y =  self.x-1,self.y+1
+        elif (self.dir == 1):
+            #search(PosX, PosY+1, string, dir, position)
+            self.y =  self.y+1
+        elif (self.dir == 2):
+            #search(PosX+1, PosY, string, dir, position)
+            self.x,self.y =  self.x+1,self.y+1
+        elif (self.dir == 3):
+            #search(PosX + 1, PosY+1, string, dir, position)
+            self.x =  self.x+1
+        self.temp_level += 1
+        if(self.x < 0 or self.x > 9) or (self.y < 0 or self.y > 9) or (self.temp_level > self.max_level):
+            self.temp_level = 0
+            self.dir += 1
+            if(self.dir > 3):
+                self.dir = 0
+                self.nextRoot()
+            self.x,self.y = self.rootx,self.rooty
+            self.string = ''
+
+    def circle(self):
+        pygame.draw.circle(SCREEN, (0,0,255), (self.rooty*blockSize+blockSize//2+2,self.rootx*blockSize+blockSize//2+5), blockSize//2,2)
+        pygame.draw.circle(SCREEN, (0,255,0), (self.y*blockSize+blockSize//2+2,self.x*blockSize+blockSize//2+5), blockSize//2,2)
+  
+    def reset(self):
+        self.run = False
+        self.rootx = 0
+        self.rooty = 0
+        self.x = 0
+        self.y = 0
+        self.string = ''
+        self.dir = 0
+        self.path = []
+        self.CurrentMem = sum(self.avg)/len(self.avg)
+        print(f'mem : {self.CurrentMem} bytes peak : {self.PeakMem} bytes Total Time :{self.Timeconsumption} ms')
+        self.CurrentMem = 0
+        self.PeakMem = 0
+        self.Timeconsumption = 0
+        self.avg.clear()
+        
+        StartResetButton_status = False
+        
 
 def main():
-    global myfont
-    global InputBox_status
+    global StartResetButton_status,InputBox_status
     
-    
-    StartResetButton_status = 'start'  
-
+    StartResetButton_status = True
     InputBox_status = True
 
     FPS = 60
@@ -144,8 +232,6 @@ def main():
     timer = pygame.time.get_ticks()
 
     #define button
-    # start_button = pygame.Rect(WIDTH*2/7, HEIGHT*4/5, 100, 50)
-    # reset_button = pygame.Rect((WIDTH*2/7)+200, HEIGHT*4/5, 100, 50)
     StartResetButton = pygame.Rect((WIDTH*2/7)+200, HEIGHT*4/5, 100, 50)
 
     #define input box
@@ -162,17 +248,14 @@ def main():
     textRect = text_delay.get_rect()  
     textRect.center = ((WIDTH*2/7)+350,HEIGHT*4/5+25) 
 
-    dfs = DFS()
+    dfs = IDDFS()
     GAME = True
-    global globalCurrentMem, globalPeakMem,Timeconsumption
-    globalPeakMem = 0
     
     def redraw():
         SCREEN.fill(BLACK)
         drawGrid()
 
-        pygame.draw.rect(SCREEN, (255, 255, 0), start_button)
-        pygame.draw.rect(SCREEN, (255,0,0), reset_button)
+        pygame.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
         dfs.circle()
 
         if InputBox_status:
@@ -213,43 +296,20 @@ def main():
                 #pygame.quit()
                 GAME = False
             elif event.type == pygame.MOUSEBUTTONDOWN:          #button click
-                if event.button == 1:                           #1 is the left mouse button, 2 is middle, 3 is right.
-                    if start_button.collidepoint(event.pos):
-                        print("------------------------START----------------------------")
-                        dfs.run = True
-                        InputBox_status = False
-                    if reset_button.collidepoint(event.pos):
-                        print("------------------------RESET----------------------------")
-                        dfs.reset()
-                        words = WORDS.copy()
-                        visited.clear()
-                        InputBox_status = True
+                if event.button == 1:                           #1 is the left mouse button, 2 is middle, 3 is right
                     if StartResetButton.collidepoint(event.pos):
-                        if StartResetButton_status == 'start':
-                            start_status = 1
-                            InputBox_status = 1
-                            print(StartResetButton_status)
-                            StartResetButton_status = 'reset'
-                        elif StartResetButton_status == 'reset':
-                            SCREEN.fill(BLACK)
-                            start_status = 0
+                        if StartResetButton_status:
+                            print("------------------------START----------------------------")
+                            dfs.run = True
+                            InputBox_status = False
+                            StartResetButton_status = not StartResetButton_status
+                        else:
+                            print("------------------------RESET----------------------------")
+                            dfs.reset()
                             words = WORDS.copy()
                             visited.clear()
-                            InputBox_status = 0
-                            StartResetButton_status = 'reset'
-                            main()
-                    # if start_button.collidepoint(event.pos):
-                    #     print("-------------------------------------------------------------------")
-                    #     start_status = 1
-                    #     InputBox_status = 1
-                    # if reset_button.collidepoint(event.pos):
-                    #     print("-------------------------------------------------------------------")
-                    #     SCREEN.fill(BLACK)
-                    #     start_status = 0
-                    #     words = WORDS.copy()
-                    #     visited.clear()
-                    #     InputBox_status = 0
-                    #     main()
+                            InputBox_status = True
+                            StartResetButton_status = not StartResetButton_status
                     if input_box.collidepoint(event.pos):
                         active = not active
                     else:
@@ -266,26 +326,7 @@ def main():
                     else:
                         text += event.unicode
                         #print(text)
-        SCREEN.fill(BLACK)
-        drawGrid()
-        if(start_status == 1):
-            if(dfs.run):
-                dfs.search()  
-                timer = pygame.time.get_ticks()
-        # pygame.draw.rect(SCREEN, (255, 255, 0), start_button)
-        # pygame.draw.rect(SCREEN, (255,0,0), reset_button)
-        pygame.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
-        # print(text)
-        if InputBox_status == 0:
-            txt_surface = myfont.render(text, True, color)
-            width = max(200, txt_surface.get_width()+10)
-            input_box.w = width
-            SCREEN.blit(txt_surface, (input_box.x+5, input_box.y+5))
-            pygame.draw.rect(SCREEN, color, input_box, 2)
-        SCREEN.blit(text_delay, textRect) 
         
-        
-        pygame.display.update()
 
                 
     tracemalloc.stop()
