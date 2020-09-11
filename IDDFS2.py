@@ -91,14 +91,19 @@ def IDDFS(row,column,string,tmp_round,last_round):
 
     if tmp_round < last_round:
         print('round: ', last_round)
-        print("\n-NorthEast: ")
-        IDDFSSearch(row, column, string, 'NorthEast', tmp_round, last_round)
-        print("\n-East: ")
-        IDDFSSearch(row, column, string, 'East', tmp_round, last_round)
-        print("\n-SouthEast: ")
-        IDDFSSearch(row, column, string, 'SouthEast', tmp_round, last_round)
-        print("\n-South: ")
-        IDDFSSearch(row, column, string, 'South', tmp_round, last_round)
+        print('level: ', level, ' row: ', row, ' column: ', column)
+        if(column !=4 and row != 0):
+            print("\n-NorthEast: ")
+            IDDFSSearch(row, column, string, 'NorthEast', tmp_round, last_round)
+        if(column != 4):
+            print("\n-East: ")
+            IDDFSSearch(row, column, string, 'East', tmp_round, last_round)
+        if (row!= 4 and column != 4):
+            print("\n-SouthEast: ")
+            IDDFSSearch(row, column, string, 'SouthEast', tmp_round, last_round)
+        if(row != 4):
+            print("\n-South: ")
+            IDDFSSearch(row, column, string, 'South', tmp_round, last_round)
         print('----------')
 
 def IDDFSSearch(row,column,string,dir,tmp_round,last_round):
@@ -108,8 +113,8 @@ def IDDFSSearch(row,column,string,dir,tmp_round,last_round):
                 print(table[row][column], end=" ")
                 #string = string + table[row][column]    #Stack
                 #print(string)
-                #redraw(row, column)
-                #time.sleep(0.5)
+                redraw(row, column)
+                time.sleep(0.5)
                 # print(tmp_round,last_round,end = " ")
                 # print(row,column,end = "\n")
                 if string in words:                     #หาว่า string(stack)ที่ได้จากการ Search ตรงกับคำที่อยู่ใน list หรือไม่
@@ -136,7 +141,7 @@ for level in range(1,5):
         for column in range(0,5):
             #print('___Root:',row,column)
             print('-------------------------------------------')
-            print('level: ',level,' row: ',row,' column: ',column)
+            #print('level: ',level,' row: ',row,' column: ',column)
             print('4-min(row,column)',4-min(row,column))
             IDDFS(row,column,"",0,min(level,4-min(row,column)))
             print('-------------------------------------------')
