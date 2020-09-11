@@ -16,8 +16,11 @@ myfont = pygame.font.SysFont("comicsans",40)
 BLACK = (0, 0, 0)
 WHITE = (200, 200, 200)
 
+start_status = 0
+reset_status = 0
+InputBox_status = 0
 
-WIDTH,HEIGHT = 800,800
+WIDTH,HEIGHT = 1000,800
 SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Test")
 
@@ -32,9 +35,9 @@ table = [['C','O','N','N','E','C','T','I','O','N'],
             ['K','R','G','R','J','S','I','R','I','O'],
             ['M','G','Z','D','E','E','P','S','M','N'],
             ['D','I','N','T','E','R','N','E','T','E'] ]
-WORDS = ['AI','FACIAL','SPEECH','CONNECTION','INTERNET',
             'IPHONE','SIRI','CELLPHONE',]#'MACHINES','SPEED'
 words = WORDS.copy()               
+WORDS = ['AI','FACIAL','SPEECH','CONNECTION','INTERNET',
 visited = []
 
 class DFS():
@@ -121,14 +124,40 @@ class DFS():
     def redraw(self):
         SCREEN.fill(BLACK)
         drawGrid()
+        start_button = pygame.Rect(800, 200, 200, 100)
+        reset_button = pygame.Rect(800, 600, 200, 100)
+
+        pygame.draw.rect(SCREEN, (255, 255, 0), start_button)
+        pygame.draw.rect(SCREEN, (255,0,0), reset_button)
         self.circle()
 
         pygame.display.update()
 
 def main():
+    global start_status
+    global reset_status
+    global words
+    global WORDS
+    global myfont
+    global InputBox_status
+
     FPS = 60
     CLOCK = pygame.time.Clock()
     timer = pygame.time.get_ticks()
+
+    #define button
+    start_button = pygame.Rect(800, 200, 200, 100)
+    reset_button = pygame.Rect(800, 600, 200, 100)
+
+    #define input box
+    input_box = pygame.Rect(800, 400, 140, 32)
+    color_inactive = pygame.Color('lightskyblue3')
+    color_active = pygame.Color('dodgerblue2')
+    color = color_inactive
+    active = False
+    text = ''
+    #--------------
+
     dfs = DFS()
     GAME = True
     global globalCurrentMem, globalPeakMem,Timeconsumption
@@ -156,6 +185,59 @@ def main():
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.quit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:          #button click
+                if event.button == 1:                           #1 is the left mouse button, 2 is middle, 3 is right.
+                    if start_button.collidepoint(event.pos):
+                        print("-------------------------------------------------------------------")
+                        start_status = 1
+                        InputBox_status = 1
+                    if reset_button.collidepoint(event.pos):
+                        print("-------------------------------------------------------------------")
+                        SCREEN.fill(BLACK)
+                        start_status = 0
+                        words = WORDS.copy()
+                        visited.clear()
+                        InputBox_status = 0
+                        main()
+                    if input_box.collidepoint(event.pos):
+                        active = not active
+                    else:
+                        active = False
+                    color = color_active if active else color_inactive
+            elif event.type == pygame.KEYDOWN:
+                if InputBox_status == 0:
+                    if event.key == pygame.K_RETURN:
+                        #print(text)
+                        text = ''
+                    if event.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                        #print(text)
+                        InputBox_status = 0
+                    else:
+                        text += event.unicode
+                        #print(text)
+        SCREEN.fill(BLACK)
+        drawGrid()
+        if(start_status == 1):
+            if(dfs.run):
+                dfs.search()  
+                timer = pygame.time.get_ticks()
+        pygame.draw.rect(SCREEN, (255, 255, 0), start_button)
+        pygame.draw.rect(SCREEN, (255,0,0), reset_button)
+        # print(text)
+        if InputBox_status == 0:
+            txt_surface = myfont.render(text, True, color)
+        # Resize the box if the text is too long.
+            width = max(200, txt_surface.get_width()+10)
+            input_box.w = width
+        # Blit the text.
+            SCREEN.blit(txt_surface, (input_box.x+5, input_box.y+5))
+        # Blit the input_box rect.
+            pygame.draw.rect(SCREEN, color, input_box, 2)
+        
+        
+        pygame.display.update()
                 #pygame.quit()
                 GAME = False
                 dfs.Timeconsumption = (pygame.time.get_ticks() - starttime)/1000
@@ -183,6 +265,5 @@ def puzzle_gen():
     for i in range(0,10):
         for j in range(0, 10):
             table[i][j] = result.get('panel').cells[i,j]
-
-
+    
 main()
