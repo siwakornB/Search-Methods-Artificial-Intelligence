@@ -30,8 +30,9 @@ table = [['C','O','N','N','E','C','T','I','O','N'],
             ['K','R','G','R','J','S','I','R','I','O'],
             ['M','G','Z','D','E','E','P','S','M','N'],
             ['D','I','N','T','E','R','N','E','T','E'] ]
-words = ['AI','facial','speed','speech','connection','internet',
-            'iphone','siri','cellphone','machines']
+words = ['AI','FACIAL','SPEECH','CONNECTION','INTERNET',
+            'IPHONE','SIRI','CELLPHONE',]               #'MACHINES','SPEED'
+visited = []
 
 class DFS():
     def __init__(self):
@@ -54,20 +55,31 @@ class DFS():
         else:
             self.run = False
             
-        print('Root' + ':' + table[self.rootx][self.rooty])
+        #print('Root' + ':' + table[self.rootx][self.rooty])
         self.redraw()
 
     def search(self):
-        print('x =',self.x,'y = ',self.y,'dir = ',self.dir)
+        #print('x =',self.x,'y = ',self.y,'dir = ',self.dir)
         if(self.x >= 0 and self.x <= 9):
             if (self.y >= 0 and self.y <= 9):
-                print(self.directory[self.dir] + ':' + table[self.x][self.y])
+                #print(self.directory[self.dir] + ':' + table[self.x][self.y])
                 self.string = self.string + table[self.x][self.y]
-                print(self.string)
+                #print(self.string)
                 self.redraw()
                 if self.string in words:
                     print("------------------------------------------------------")
                     self.path.append(self.string)
+                    words.remove(self.string)
+                    visited.append(self.string)
+                    print(visited)
+                    self.dir += 1 
+                    if(self.dir > 3):
+                        self.dir = 0
+                        self.nextRoot()
+                    self.x,self.y = self.rootx,self.rooty
+                    self.string = ''
+                    if(len(words) <= 0):
+                        self.run = False
                 if (self.dir == 0):
                     #search(PosX-1, PosY+1, string, dir, position)
                     self.x,self.y =  self.x-1,self.y+1
@@ -99,8 +111,7 @@ class DFS():
     def circle(self):
         pygame.draw.circle(SCREEN, (0,0,255), (self.rooty*blockSize+blockSize//4+2,self.rootx*blockSize+blockSize//4+5), blockSize//4,2)
         pygame.draw.circle(SCREEN, (0,255,0), (self.y*blockSize+blockSize//4+2,self.x*blockSize+blockSize//4+5), blockSize//4,2)
-
-    
+  
     def redraw(self):
         SCREEN.fill(BLACK)
         drawGrid()
@@ -119,7 +130,7 @@ def main():
         CLOCK.tick(FPS)
         t = pygame.time.get_ticks() - timer
         #print(t)
-        if( dfs.run):
+        if(dfs.run):
             dfs.search()
             timer = pygame.time.get_ticks()
         
