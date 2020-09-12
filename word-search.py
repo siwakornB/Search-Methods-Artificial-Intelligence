@@ -3,6 +3,7 @@ import pygame
 import os 
 import random
 import time
+import datetime
 #import puzzel generetor
 from word_search_puzzle.utils import display_panel
 from word_search_puzzle.algorithms import create_panel
@@ -11,6 +12,7 @@ import tracemalloc
 
 pygame.font.init()
 myfont = pygame.font.SysFont("comicsans",40)
+litfont = pygame.font.SysFont("comicsans",30)
 
 
 BLACK = (0, 0, 0)
@@ -18,7 +20,7 @@ WHITE = (200, 200, 200)
 
 WIDTH,HEIGHT = 1366,768
 SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
-pygame.display.set_caption("Test")
+pygame.display.set_caption("Words Search")
 
 blockSize = 40 #Set the size of the grid block
 table = [['C','O','N','N','E','C','T','I','O','N'],
@@ -36,6 +38,27 @@ WORDS = ['AI','FACIAL','SPEECH','CONNECTION','INTERNET',
             'IPHONE','SIRI','CELLPHONE',]#'MACHINES','SPEED'
 words = WORDS.copy() 
 visited = []
+class Timer:
+    def __init__(self):
+        self.accumulated_time = 0
+        self.start_time = pygame.time.get_ticks()
+        self.running = False
+
+    def pause(self):
+        self.running = False
+        self.accumulated_time += pygame.time.get_ticks() - self.start_time
+
+    def start(self):
+        self.running = True
+        self.start_time = pygame.time.get_ticks()
+
+    def get(self):
+        if self.running:
+            return (self.accumulated_time +
+                    (pygame.time.get_ticks() - self.start_time))
+        else:
+            return self.accumulated_time
+
 
 class DFS():        #depth first search
     def __init__(self):
@@ -52,6 +75,8 @@ class DFS():        #depth first search
         self.PeakMem = 0
         self.Timeconsumption = 0
         self.avg = []
+        self.words = WORDS.copy()
+        self.visited = []
         
     def nextRoot(self):
         if(self.rooty < 9):
@@ -59,31 +84,31 @@ class DFS():        #depth first search
         elif(self.rootx < 9):
             self.rooty = 0
             self.rootx += 1
-        else:
-            self.run = False
             
-        print('Root' + ':' + table[self.rootx][self.rooty])
+            
+        #print('Root' + ':' + table[self.rootx][self.rooty])
 
     def search(self):
-        print('x =',self.x,'y = ',self.y,'dir = ',self.dir)
+        #print('x =',self.x,'y = ',self.y,'dir = ',self.dir)
         
-        print(self.directory[self.dir] + ':' + table[self.x][self.y])
+        #print(self.directory[self.dir] + ':' + table[self.x][self.y])
         self.string = self.string + table[self.x][self.y]
-        print(self.string)
-        if self.string in words:
+        #print(self.string)
+        if self.string in self.words:
             print("------------------------------------------------------")
             self.path.append(self.string)
-            words.remove(self.string)
-            visited.append(self.string)
-            print(visited)
+            self.words.remove(self.string)
+            self.visited.append(self.string)
+            print(self.visited)
             self.dir += 1 
             if(self.dir > 3):
                 self.dir = 0
                 self.nextRoot()
             self.x,self.y = self.rootx,self.rooty
             self.string = ''
-            if(len(words) <= 0):
-                self.reset()
+            if(len(self.words) <= 0):
+                self.run = False
+                print(f'mem : {self.CurrentMem} bytes peak : {self.PeakMem} bytes Total Time :{self.Timeconsumption} ms')
         if (self.dir == 0):
             #search(PosX-1, PosY+1, string, dir, position)
             self.x,self.y =  self.x-1,self.y+1
@@ -104,9 +129,18 @@ class DFS():        #depth first search
             self.x,self.y = self.rootx,self.rooty
             self.string = ''
 
-    def circle(self):
+    def draw(self):
         pygame.draw.circle(SCREEN, (0,0,255), (self.rooty*blockSize+blockSize//2+2,self.rootx*blockSize+blockSize//2+5), blockSize//2,2)
         pygame.draw.circle(SCREEN, (0,255,0), (self.y*blockSize+blockSize//2+2,self.x*blockSize+blockSize//2+5), blockSize//2,2)
+
+        txt = [f'mem : {self.CurrentMem} bytes',f'peak : {self.PeakMem} bytes',f'Total Time :{self.Timeconsumption} ms']
+        stat1 = litfont.render(txt[0], True, WHITE)
+        stat2 = litfont.render(txt[1], True, WHITE)
+        stat3 = litfont.render(txt[2], True, WHITE)
+        # Blit the text.
+        SCREEN.blit(stat1, (50,500))
+        SCREEN.blit(stat2, (50,530))
+        SCREEN.blit(stat3, (50,560))
   
     def reset(self):
         self.run = False
@@ -117,13 +151,15 @@ class DFS():        #depth first search
         self.string = ''
         self.dir = 0
         self.path = []
-        self.CurrentMem = sum(self.avg)/len(self.avg)
         print(f'mem : {self.CurrentMem} bytes peak : {self.PeakMem} bytes Total Time :{self.Timeconsumption} ms')
         self.CurrentMem = 0
         self.PeakMem = 0
         self.Timeconsumption = 0
         self.avg.clear()
         
+        self.words = WORDS.copy()
+        self.visited.clear()
+        global StartResetButton_status
         StartResetButton_status = False
         
 
@@ -142,6 +178,8 @@ class IDDFS():       #iterative deepening depth first search
         self.PeakMem = 0
         self.Timeconsumption = 0
         self.avg = []
+        self.words = WORDS.copy()
+        self.visited = []
         self.temp_level = 0
         self.max_level = 1
         
@@ -151,31 +189,39 @@ class IDDFS():       #iterative deepening depth first search
         elif(self.rootx < 9):
             self.rooty = 0
             self.rootx += 1
+        elif self.rooty == 9 and self.rootx == 9:
+            self.max_level += 1
+            self.temp_level = 0
+            self.rootx = 0 #just for keeping root
+            self.rooty = 0
+            self.dir = 0 #0-3 for directory
         else:
             self.run = False
+
             
-        print('Root' + ':' + table[self.rootx][self.rooty])
+        #print('Root' + ':' + table[self.rootx][self.rooty])
 
     def search(self):
-        print('temp',self.temp_level,'max',self.max_level)
+        #print('temp',self.temp_level,'max',self.max_level)
         
-        print(self.directory[self.dir])
+        #print(self.directory[self.dir])
         self.string = self.string + table[self.x][self.y]
         #print(self.string)
-        if self.string in words:
+        if self.string in self.words:
             print("------------------------------------------------------")
             self.path.append(self.string)
-            words.remove(self.string)
-            visited.append(self.string)
-            print(visited)
+            self.words.remove(self.string)
+            self.visited.append(self.string)
+            print(self.visited)
             self.dir += 1 
             if(self.dir > 3):
                 self.dir = 0
                 self.nextRoot()
             self.x,self.y = self.rootx,self.rooty
             self.string = ''
-        if(len(words) <= 0):
-            self.reset()
+        if(len(self.words) <= 0):
+            self.run = False
+            print(f'mem : {self.CurrentMem} bytes peak : {self.PeakMem} bytes Total Time :{self.Timeconsumption} ms')
         if (self.dir == 0 ):
             #search(PosX-1, PosY+1, string, dir, position)
             self.x,self.y =  self.x-1,self.y+1
@@ -198,9 +244,18 @@ class IDDFS():       #iterative deepening depth first search
             self.x,self.y = self.rootx,self.rooty
             self.string = ''
 
-    def circle(self):
-        pygame.draw.circle(SCREEN, (0,0,255), (self.rooty*blockSize+blockSize//2+2,self.rootx*blockSize+blockSize//2+5), blockSize//2,2)
-        pygame.draw.circle(SCREEN, (0,255,0), (self.y*blockSize+blockSize//2+2,self.x*blockSize+blockSize//2+5), blockSize//2,2)
+    def draw(self):
+        pygame.draw.circle(SCREEN, (0,0,255), (self.rooty*blockSize+blockSize//2+902,self.rootx*blockSize+blockSize//2+5), blockSize//2,2)
+        pygame.draw.circle(SCREEN, (0,255,0), (self.y*blockSize+blockSize//2+902,self.x*blockSize+blockSize//2+5), blockSize//2,2)
+
+        txt = [f'mem : {self.CurrentMem} bytes',f'peak : {self.PeakMem} bytes',f'Total Time :{self.Timeconsumption} ms']
+        stat1 = litfont.render(txt[0], True, WHITE)
+        stat2 = litfont.render(txt[1], True, WHITE)
+        stat3 = litfont.render(txt[2], True, WHITE)
+        # Blit the text.
+        SCREEN.blit(stat1, (950,500))
+        SCREEN.blit(stat2, (950,530))
+        SCREEN.blit(stat3, (950,560))
   
     def reset(self):
         self.run = False
@@ -211,13 +266,17 @@ class IDDFS():       #iterative deepening depth first search
         self.string = ''
         self.dir = 0
         self.path = []
-        self.CurrentMem = sum(self.avg)/len(self.avg)
         print(f'mem : {self.CurrentMem} bytes peak : {self.PeakMem} bytes Total Time :{self.Timeconsumption} ms')
         self.CurrentMem = 0
         self.PeakMem = 0
         self.Timeconsumption = 0
         self.avg.clear()
+        self.max_level = 1
+        self.temp_level = 0
         
+        self.words = WORDS.copy()
+        self.visited.clear()
+        global StartResetButton_status
         StartResetButton_status = False
         
 
@@ -230,6 +289,7 @@ def main():
     FPS = 60
     CLOCK = pygame.time.Clock()
     timer = pygame.time.get_ticks()
+    timer2 = pygame.time.get_ticks()
 
     #define button
     StartResetButton = pygame.Rect((WIDTH*2/7)+200, HEIGHT*4/5, 100, 50)
@@ -248,7 +308,8 @@ def main():
     textRect = text_delay.get_rect()  
     textRect.center = ((WIDTH*2/7)+350,HEIGHT*4/5+25) 
 
-    dfs = IDDFS()
+    dfs = DFS()
+    iddfs = IDDFS()
     GAME = True
     
     def redraw():
@@ -256,7 +317,8 @@ def main():
         drawGrid()
 
         pygame.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
-        dfs.circle()
+        dfs.draw()
+        iddfs.draw()
 
         if InputBox_status:
                 txt_surface = myfont.render(text, True, color)
@@ -270,26 +332,50 @@ def main():
 
         pygame.display.update()
     
-    tracemalloc.start()
+    
     while GAME:
         CLOCK.tick(FPS)
-        t = pygame.time.get_ticks() - timer
-        #print(t)
-
-        if(t > 0 and dfs.run):
-            starttime = pygame.time.get_ticks()
-            dfs.search()
+        t1 = pygame.time.get_ticks() - timer
+        t2 = pygame.time.get_ticks() - timer2
+        #DFS
+        delay = 0
+        if(t1 > delay and dfs.run):
             timer = pygame.time.get_ticks()
+            
+            tracemalloc.start()
+            starttime1 = datetime.datetime.now()
+            dfs.search()
             CurrentMem, PeakMem = tracemalloc.get_traced_memory()
-            if(len(dfs.avg) <= 80):
+            if(len(dfs.avg) <= 100):
                 dfs.avg.append(CurrentMem)
             else:
                 dfs.avg.pop(0)
                 dfs.avg.append(CurrentMem)
             if(PeakMem > dfs.PeakMem):
                 dfs.PeakMem = PeakMem
-            
-            dfs.Timeconsumption += (pygame.time.get_ticks() - starttime)
+            dfs.CurrentMem = sum(dfs.avg)/len(dfs.avg)
+            tim = (datetime.datetime.now() - starttime1)
+            dfs.Timeconsumption += tim.microseconds/1000
+            tracemalloc.stop()
+            #------ IDDFS -----------
+        if(t2 > delay and iddfs.run):
+            timer2 = pygame.time.get_ticks()
+
+            tracemalloc.start()
+            starttime2 = datetime.datetime.now()
+            iddfs.search()
+            CurrentMem, PeakMem = tracemalloc.get_traced_memory()
+            if(len(iddfs.avg) <= 100):
+                iddfs.avg.append(CurrentMem)
+            else:
+                iddfs.avg.pop(0)
+                iddfs.avg.append(CurrentMem)
+            if(PeakMem > iddfs.PeakMem):
+                iddfs.PeakMem = PeakMem
+            iddfs.CurrentMem = sum(iddfs.avg)/len(iddfs.avg)
+            tim2 = (datetime.datetime.now() - starttime2)
+            iddfs.Timeconsumption += tim2.microseconds/1000
+            tracemalloc.stop()
         redraw()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -301,13 +387,13 @@ def main():
                         if StartResetButton_status:
                             print("------------------------START----------------------------")
                             dfs.run = True
+                            iddfs.run = True
                             InputBox_status = False
                             StartResetButton_status = not StartResetButton_status
                         else:
                             print("------------------------RESET----------------------------")
                             dfs.reset()
-                            words = WORDS.copy()
-                            visited.clear()
+                            iddfs.reset()
                             InputBox_status = True
                             StartResetButton_status = not StartResetButton_status
                     if input_box.collidepoint(event.pos):
@@ -323,24 +409,20 @@ def main():
                     if event.key == pygame.K_BACKSPACE:
                         text = text[:-1]
                         #print(text)
-                    else:
+                    elif ord(event.unicode) > 0 and ord(event.unicode) <= 1000:
                         text += event.unicode
+
                         #print(text)
         
 
-                
-    tracemalloc.stop()
-
-    
-    
 
 def drawGrid():
     for x in range(10):
         for y in range(10):
-            #rect = pygame.Rect(x*blockSize, y*blockSize,blockSize, blockSize)
-            #pygame.draw.rect(SCREEN, WHITE, rect, 1)
             textsurface = myfont.render(table[x][y], True, (255, 255, 255)) #text / Anti aliasing / color (in this case it's white)
             SCREEN.blit(textsurface,(y*blockSize+15,x*blockSize+15))
+
+            SCREEN.blit(textsurface,(y*blockSize+15+900,x*blockSize+15))
 
 def puzzle_gen():
     global words,table
