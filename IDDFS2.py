@@ -76,22 +76,28 @@ def circle(PosX,PosY):
             #print('Root:',i,j)
             #DFS(i,j,"")
 
-def s():
-    for level in range(1, 5):
-        for row in range(0, 5):
-            for column in range(0, 5):
-                # print('___Root:',row,column)
-                print('-------------------------------------------')
-                print('level: ', level, ' row: ', row, ' column: ', column)
-                print('4-min(row,column)', 4 - min(row, column))
-                IDDFS(row, column, "", 0, min(level, 4 - min(row, column)))
-                print('-------------------------------------------')
+# def s():
+#     for level in range(1, 5):
+#         for row in range(0, 5):
+#             for column in range(0, 5):
+#                 # print('___Root:',row,column)
+#                 print('-------------------------------------------')
+#                 print('level: ', level, ' row: ', row, ' column: ', column)
+#                 print('4-min(row,column)', 4 - min(row, column))
+#                 IDDFS(row, column, "", 0, min(level, 4 - min(row, column)))
+#                 print('-------------------------------------------')
 
 def IDDFS(row,column,string,tmp_round,last_round):
+    print('tmp_round: ', tmp_round,' last_round: ', last_round)
+    print('level: ', level, ' row: ', row, ' column: ', column)
+    if ((column == 4 and row == 4) or (tmp_round == last_round)):       #access Last node and node which children node = 0
+        print(table[row][column], end=" ")
+        # string = string + table[row][column]    #Stack
+        # print(string)
+        redraw(row, column)
+        time.sleep(0.25)
 
     if tmp_round < last_round:
-        print('round: ', last_round)
-        print('level: ', level, ' row: ', row, ' column: ', column)
         if(column !=4 and row != 0):
             print("\n-NorthEast: ") 
             IDDFSSearch(row, column, string, 'NorthEast', tmp_round, last_round)
@@ -114,7 +120,7 @@ def IDDFSSearch(row,column,string,dir,tmp_round,last_round):
                 #string = string + table[row][column]    #Stack
                 #print(string)
                 redraw(row, column)
-                time.sleep(0.5)
+                time.sleep(0.25)
                 # print(tmp_round,last_round,end = " ")
                 # print(row,column,end = "\n")
                 if string in words:                     #หาว่า string(stack)ที่ได้จากการ Search ตรงกับคำที่อยู่ใน list หรือไม่
@@ -136,7 +142,7 @@ def IDDFSSearch(row,column,string,dir,tmp_round,last_round):
                     IDDFSSearch(row+1, column, string, dir,tmp_round+1,last_round)
                 if (dir == 'SouthEast'):
                     IDDFSSearch(row + 1, column+1, string, dir,tmp_round+1,last_round)
-for level in range(1,5):
+for level in range(0,5):
     for row in range(0,5):
         for column in range(0,5):
             #print('___Root:',row,column)
@@ -144,5 +150,5 @@ for level in range(1,5):
             #print('level: ',level,' row: ',row,' column: ',column)
             print('4-min(row,column)',4-min(row,column))
             IDDFS(row,column,"",0,min(level,4-min(row,column)))
-            print('-------------------------------------------')
+            print()
 # print(position)
