@@ -154,13 +154,7 @@ class DFS():        #depth first search
             self.string = ''
 
     def draw(self):
-        #draw search circle
-        pygame.draw.circle(SCREEN, (0, 0, 255),
-                           (self.rootcol * blockSize + blockSize // 2 + 2+30, self.rootrow * blockSize + blockSize // 2 + 5+30),
-                           blockSize // 2, 2)
-        pygame.draw.circle(SCREEN, (0, 255, 0),
-                           (self.column * blockSize + blockSize // 2 + 2+30, self.row * blockSize + blockSize // 2 + 5+30),
-                           blockSize // 2, 2)
+        
         for index,vis in enumerate(self.visited):
             #print(index,vis)
             start_x,start_y = vis[1].split(',')
@@ -205,6 +199,14 @@ class DFS():        #depth first search
                                    (start_x * blockSize + blockSize // 2 + 2+30,
                                     start_y * blockSize + blockSize // 2 + 5+linecount+30),
                                    blockSize // 3+4, 0)
+
+        #draw search circle
+        pygame.draw.circle(SCREEN, (0, 0, 255),
+                           (self.rootcol * blockSize + blockSize // 2 + 2+30, self.rootrow * blockSize + blockSize // 2 + 5+30),
+                           blockSize // 2, 2)
+        pygame.draw.circle(SCREEN, (0, 255, 0),
+                           (self.column * blockSize + blockSize // 2 + 2+30, self.row * blockSize + blockSize // 2 + 5+30),
+                           blockSize // 2, 2)
 
         txt = [f'mem : {self.CurrentMem:.3f} bytes',f'peak : {self.PeakMem:.3f} bytes',f'Total Time :{self.Timeconsumption:.3f} ms']
         stat1 = litfont.render(txt[0], True, WHITE)
@@ -331,12 +333,7 @@ class IDDFS():       #iterative deepening depth first search
             self.string = ''
 
     def draw(self):
-        pygame.draw.circle(SCREEN, (0, 0, 255),
-                           (self.rootcol * blockSize + blockSize // 2 + 902+30, self.rootrow * blockSize + blockSize // 2 + 5+30),
-                           blockSize // 2, 2)
-        pygame.draw.circle(SCREEN, (0, 255, 0),
-                           (self.column * blockSize + blockSize // 2 + 902+30, self.row * blockSize + blockSize // 2 + 5+30),
-                           blockSize // 2, 2)
+        
 
         for index,vis in enumerate(self.visited):
             #print(index,vis)
@@ -383,6 +380,12 @@ class IDDFS():       #iterative deepening depth first search
                                     start_y * blockSize + blockSize // 2 + 5+linecount+30),
                                    blockSize // 3+4, 0)
 
+        pygame.draw.circle(SCREEN, (0, 0, 255),
+                           (self.rootcol * blockSize + blockSize // 2 + 902+30, self.rootrow * blockSize + blockSize // 2 + 5+30),
+                           blockSize // 2, 2)
+        pygame.draw.circle(SCREEN, (0, 255, 0),
+                           (self.column * blockSize + blockSize // 2 + 902+30, self.row * blockSize + blockSize // 2 + 5+30),
+                           blockSize // 2, 2)
 
         txt = [f'mem : {self.CurrentMem:.3f} bytes',f'peak : {self.PeakMem:.3f} bytes',f'Total Time :{self.Timeconsumption:.3f} ms']
         stat1 = litfont.render(txt[0], True, WHITE)
