@@ -22,21 +22,22 @@ WIDTH,HEIGHT = 1366,768
 SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Words Search")
 
-blockSize = 40 #Set the size of the grid block
-table = [['C','O','N','N','E','C','T','I','O','N'],
-            ['F','C','E','L','L','P','H','O','N','E'],
-            ['A','R','Z','T','S','P','E','E','C','H'],
-            ['C','B','T','M','A','L','U','J','G','G'],
-            ['I','A','L','I','F','I','U','G','B','I'],
-            ['A','S','E','N','I','H','C','A','M','P'],
-            ['L','L','H','P','B','E','J','O','S','H'],
-            ['K','R','G','R','J','S','I','R','I','O'],
-            ['M','G','Z','D','E','E','P','S','M','N'],
-            ['D','I','N','T','E','R','N','E','T','E'] ]
-            
-WORDS = ['AI','FACIAL','SPEECH','CONNECTION','INTERNET',
-            'IPHONE','SIRI','CELLPHONE',]#'MACHINES','SPEED'
-words = WORDS.copy() 
+blockSize = 40  # Set the size of the grid block
+table = [['C', 'O', 'N', 'N', 'E', 'C', 'T', 'I', 'O', 'N'],
+         ['F', 'C', 'E', 'L', 'L', 'P', 'H', 'O', 'N', 'E'],
+         ['A', 'R', 'Z', 'T', 'S', 'P', 'E', 'E', 'C', 'H'],
+         ['C', 'B', 'T', 'M', 'A', 'L', 'U', 'J', 'G', 'G'],
+         ['I', 'A', 'L', 'X', 'F', 'I', 'U', 'G', 'B', 'I'],
+         ['A', 'S', 'E', 'N', 'I', 'H', 'C', 'A', 'M', 'P'],
+         ['L', 'L', 'H', 'P', 'B', 'E', 'M', 'O', 'S', 'H'],
+         ['K', 'L', 'G', 'R', 'J', 'S', 'I', 'R', 'I', 'O'],
+         ['M', 'R', 'Z', 'D', 'E', 'E', 'P', 'S', 'M', 'N'],
+         ['D', 'I', 'N', 'T', 'E', 'R', 'N', 'E', 'T', 'E']]
+
+WORDS = ['AI', 'FACIAL', 'SPEECH', 'CONNECTION', 'INTERNET',
+         'IPHONE', 'SIRI', 'CELLPHONE','ML' ]  # 'MACHINES','SPEED'
+WORDSs = ['AI','ML']
+words = WORDS.copy()
 visited = []
 class Timer:
     def __init__(self):
@@ -62,11 +63,11 @@ class Timer:
 
 class DFS():        #depth first search
     def __init__(self):
-        self.run = False #initial with running state
-        self.rootx = 0 #just for keeping root
-        self.rooty = 0
-        self.x = 0  #for keeping recent search
-        self.y = 0
+        self.run = False  # initial with running state
+        self.rootrow = 0  # just for keeping root
+        self.rootcol = 0
+        self.row = 0  # for keeping recent search
+        self.column = 0
         self.string = ''
         self.dir = 0 #0-3 for directory
         self.directory = ['NorthEast','East','SouthEast','South']
@@ -77,16 +78,15 @@ class DFS():        #depth first search
         self.avg = []
         self.words = WORDS.copy()
         self.visited = []
-        
+
     def nextRoot(self):
-        if(self.rooty < 9):
-            self.rooty += 1
-        elif(self.rootx < 9):
-            self.rooty = 0
-            self.rootx += 1
-            
-            
-        #print('Root' + ':' + table[self.rootx][self.rooty])
+        if (self.rootcol < 9):
+            self.rootcol += 1
+        elif (self.rootrow < 9):
+            self.rootcol = 0
+            self.rootrow += 1
+
+        # print('Root' + ':' + table[self.rootrow][self.rootcol])
 
     def search(self):
         #print('x =',self.x,'y = ',self.y,'dir = ',self.dir)
@@ -98,13 +98,28 @@ class DFS():        #depth first search
             print("------------------------------------------------------")
             self.path.append(self.string)
             self.words.remove(self.string)
-            self.visited.append(self.string)
+            #-------------------------
+            visit_each = []
+            visit_each.append(self.string)
+            if (self.dir == 0):
+                visit_each.append(str(self.column - len(self.string)+1) + ',' + str(self.row + len(self.string)-1))
+            elif (self.dir == 1):
+                visit_each.append(str(self.column - len(self.string) + 1) + ',' + str(self.row))
+            elif (self.dir == 2):
+                visit_each.append(str(self.column - 1) + ',' + str(self.row - len(self.string) + 1))
+            elif (self.dir == 3):
+                visit_each.append(str(self.column) + ',' + str(self.row - len(self.string) + 1))
+            visit_each.append(str(self.column)+ ',' + str(self.row))
+            visit_each.append(self.dir)
+            self.visited.append(visit_each)
+            #-------------------------
             print(self.visited)
-            self.dir += 1 
-            if(self.dir > 3):
+            self.visit_each = ['' for i in range(4)]
+            self.dir += 1
+            if (self.dir > 3):
                 self.dir = 0
                 self.nextRoot()
-            self.x,self.y = self.rootx,self.rooty
+            self.row, self.column = self.rootrow, self.rootcol
             self.string = ''
             if(len(self.words) <= 0):
                 self.run = False
@@ -126,12 +141,60 @@ class DFS():        #depth first search
             if(self.dir > 3):
                 self.dir = 0
                 self.nextRoot()
-            self.x,self.y = self.rootx,self.rooty
+            self.row, self.column = self.rootrow, self.rootcol
             self.string = ''
 
     def draw(self):
-        pygame.draw.circle(SCREEN, (0,0,255), (self.rooty*blockSize+blockSize//2+2,self.rootx*blockSize+blockSize//2+5), blockSize//2,2)
-        pygame.draw.circle(SCREEN, (0,255,0), (self.y*blockSize+blockSize//2+2,self.x*blockSize+blockSize//2+5), blockSize//2,2)
+        #draw search circle
+        pygame.draw.circle(SCREEN, (0, 0, 255),
+                           (self.rootcol * blockSize + blockSize // 2 + 2, self.rootrow * blockSize + blockSize // 2 + 5),
+                           blockSize // 2, 2)
+        pygame.draw.circle(SCREEN, (0, 255, 0),
+                           (self.column * blockSize + blockSize // 2 + 2, self.row * blockSize + blockSize // 2 + 5),
+                           blockSize // 2, 2)
+        for index,vis in enumerate(self.visited):
+            #print(index,vis)
+            start_x,start_y = vis[1].split(',')
+            end_x,end_y = vis[2].split(',')
+            start_x = int(start_x)
+            start_y = int(start_y)
+            end_x = int(end_x)
+            end_y = int(end_y)
+            if (vis[3] == 0):
+                
+                while start_x <= end_x and start_y >= end_y :
+                    #print(start_x, start_y)
+                    pygame.draw.circle(SCREEN, (0, 255, 0),
+                                       (start_x * blockSize + blockSize // 2 + 2,
+                                        start_y * blockSize + blockSize // 2 + 5),
+                                       blockSize // 2, 0)
+                    start_x += 1
+                    start_y -= 1
+            if(vis[3] == 1):
+                while start_x <= end_x :
+                    #print(start_x, start_y)
+                    pygame.draw.circle(SCREEN, (255, 255, 255),
+                                   (start_x * blockSize + blockSize // 2 + 2,
+                                    start_y * blockSize + blockSize // 2 + 5),
+                                   blockSize // 2, 0)
+                    start_x+=1
+            if (vis[3] == 2):
+                while start_x <= end_x and start_y <= end_y :
+                    #print(start_x, start_y)
+                    pygame.draw.circle(SCREEN, (0, 255, 0),
+                                       (start_x * blockSize + blockSize // 2 + 2,
+                                        start_y * blockSize + blockSize // 2 + 5),
+                                       blockSize // 2, 0)
+                    start_x += 1
+                    start_y += 1
+            if(vis[3] == 3):
+                while start_y <= end_y :
+                    #print(start_x, start_y)
+                    pygame.draw.circle(SCREEN, (0, 255, 0),
+                                   (start_x * blockSize + blockSize // 2 + 2,
+                                    start_y * blockSize + blockSize // 2 + 5),
+                                   blockSize // 2, 0)
+                    start_y+=1
 
         txt = [f'mem : {self.CurrentMem} bytes',f'peak : {self.PeakMem} bytes',f'Total Time :{self.Timeconsumption} ms']
         stat1 = litfont.render(txt[0], True, WHITE)
@@ -144,10 +207,10 @@ class DFS():        #depth first search
   
     def reset(self):
         self.run = False
-        self.rootx = 0
-        self.rooty = 0
-        self.x = 0
-        self.y = 0
+        self.rootrow = 0
+        self.rootcol = 0
+        self.row = 0
+        self.column = 0
         self.string = ''
         self.dir = 0
         self.path = []
@@ -165,11 +228,11 @@ class DFS():        #depth first search
 
 class IDDFS():       #iterative deepening depth first search
     def __init__(self):
-        self.run = False #initial with running state
-        self.rootx = 0 #just for keeping root
-        self.rooty = 0
-        self.x = 0  #for keeping recent search
-        self.y = 0
+        self.run = False  # initial with running state
+        self.rootrow = 0  # just for keeping root
+        self.rootcol = 0
+        self.row = 0  # column # for keeping recent search
+        self.column = 0  # row
         self.string = ''
         self.dir = 0 #0-3 for directory
         self.directory = ['NorthEast','East','SouthEast','South']
@@ -184,22 +247,21 @@ class IDDFS():       #iterative deepening depth first search
         self.max_level = 1
         
     def nextRoot(self):
-        if(self.rooty < 9):
-            self.rooty += 1
-        elif(self.rootx < 9):
-            self.rooty = 0
-            self.rootx += 1
-        elif self.rooty == 9 and self.rootx == 9:
+        if (self.rootcol < 9):
+            self.rootcol += 1
+        elif (self.rootrow < 9):
+            self.rootcol = 0
+            self.rootrow += 1
+        elif self.rootcol == 9 and self.rootrow == 9:
             self.max_level += 1
             self.temp_level = 0
-            self.rootx = 0 #just for keeping root
-            self.rooty = 0
-            self.dir = 0 #0-3 for directory
+            self.rootrow = 0  # just for keeping root
+            self.rootcol = 0
+            self.dir = 0  # 0-3 for directory
         else:
             self.run = False
 
-            
-        #print('Root' + ':' + table[self.rootx][self.rooty])
+        # print('Root' + ':' + table[self.rootrow][self.rootcol])
 
     def search(self):
         #print('temp',self.temp_level,'max',self.max_level)
@@ -211,13 +273,27 @@ class IDDFS():       #iterative deepening depth first search
             print("------------------------------------------------------")
             self.path.append(self.string)
             self.words.remove(self.string)
-            self.visited.append(self.string)
+            #-------------------------
+            visit_each = []
+            visit_each.append(self.string)
+            if (self.dir == 0):
+                visit_each.append(str(self.column - len(self.string)+1) + ',' + str(self.row + len(self.string)-1))
+            elif (self.dir == 1):
+                visit_each.append(str(self.column - len(self.string) + 1) + ',' + str(self.row))
+            elif (self.dir == 2):
+                visit_each.append(str(self.column - 1) + ',' + str(self.row - len(self.string) + 1))
+            elif (self.dir == 3):
+                visit_each.append(str(self.column) + ',' + str(self.row - len(self.string) + 1))
+            visit_each.append(str(self.column)+ ',' + str(self.row))
+            visit_each.append(self.dir)
+            self.visited.append(visit_each)
+            #-------------------------
             print(self.visited)
             self.dir += 1 
             if(self.dir > 3):
                 self.dir = 0
                 self.nextRoot()
-            self.x,self.y = self.rootx,self.rooty
+            self.row, self.column = self.rootrow, self.rootcol
             self.string = ''
         if(len(self.words) <= 0):
             self.run = False
@@ -241,14 +317,63 @@ class IDDFS():       #iterative deepening depth first search
             if(self.dir > 3):
                 self.dir = 0
                 self.nextRoot()
-            self.x,self.y = self.rootx,self.rooty
+            self.row, self.column = self.rootrow, self.rootcol
             self.string = ''
 
     def draw(self):
-        pygame.draw.circle(SCREEN, (0,0,255), (self.rooty*blockSize+blockSize//2+902,self.rootx*blockSize+blockSize//2+5), blockSize//2,2)
-        pygame.draw.circle(SCREEN, (0,255,0), (self.y*blockSize+blockSize//2+902,self.x*blockSize+blockSize//2+5), blockSize//2,2)
+        pygame.draw.circle(SCREEN, (0, 0, 255),
+                           (self.rootcol * blockSize + blockSize // 2 + 902, self.rootrow * blockSize + blockSize // 2 + 5),
+                           blockSize // 2, 2)
+        pygame.draw.circle(SCREEN, (0, 255, 0),
+                           (self.column * blockSize + blockSize // 2 + 902, self.row * blockSize + blockSize // 2 + 5),
+                           blockSize // 2, 2)
 
-        txt = [f'mem : {self.CurrentMem} bytes',f'peak : {self.PeakMem} bytes',f'Total Time :{self.Timeconsumption} ms']
+        for index,vis in enumerate(self.visited):
+            #print(index,vis)
+            start_x,start_y = vis[1].split(',')
+            end_x,end_y = vis[2].split(',')
+            start_x = int(start_x)
+            start_y = int(start_y)
+            end_x = int(end_x)
+            end_y = int(end_y)
+            if (vis[3] == 0):
+                
+                while start_x <= end_x and start_y >= end_y :
+                    #print(start_x, start_y)
+                    pygame.draw.circle(SCREEN, (0, 255, 0),
+                                       (start_x * blockSize + blockSize // 2 + 902,
+                                        start_y * blockSize + blockSize // 2 + 5),
+                                       blockSize // 2, 0)
+                    start_x += 1
+                    start_y -= 1
+            if(vis[3] == 1):
+                while start_x <= end_x :
+                    #print(start_x, start_y)
+                    pygame.draw.circle(SCREEN, (255, 255, 255),
+                                   (start_x * blockSize + blockSize // 2 + 902,
+                                    start_y * blockSize + blockSize // 2 + 5),
+                                   blockSize // 2, 0)
+                    start_x+=1
+            if (vis[3] == 2):
+                while start_x <= end_x and start_y <= end_y :
+                    #print(start_x, start_y)
+                    pygame.draw.circle(SCREEN, (0, 255, 0),
+                                       (start_x * blockSize + blockSize // 2 + 902,
+                                        start_y * blockSize + blockSize // 2 + 5),
+                                       blockSize // 2, 0)
+                    start_x += 1
+                    start_y += 1
+            if(vis[3] == 3):
+                while start_y <= end_y :
+                    #print(start_x, start_y)
+                    pygame.draw.circle(SCREEN, (0, 255, 0),
+                                   (start_x * blockSize + blockSize // 2 + 902,
+                                    start_y * blockSize + blockSize // 2 + 5),
+                                   blockSize // 2, 0)
+                    start_y+=1
+
+        txt = [f'mem : {self.CurrentMem} bytes', f'peak : {self.PeakMem} bytes',
+               f'Total Time :{self.Timeconsumption} ms']
         stat1 = litfont.render(txt[0], True, WHITE)
         stat2 = litfont.render(txt[1], True, WHITE)
         stat3 = litfont.render(txt[2], True, WHITE)
@@ -259,10 +384,10 @@ class IDDFS():       #iterative deepening depth first search
   
     def reset(self):
         self.run = False
-        self.rootx = 0
-        self.rooty = 0
-        self.x = 0
-        self.y = 0
+        self.rootrow = 0
+        self.rootcol = 0
+        self.row = 0
+        self.column = 0
         self.string = ''
         self.dir = 0
         self.path = []
@@ -314,7 +439,7 @@ def main():
     
     def redraw():
         SCREEN.fill(BLACK)
-        drawGrid()
+        
 
         pygame.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
         dfs.draw()
@@ -328,8 +453,8 @@ def main():
             # Blit the text.
                 SCREEN.blit(txt_surface, (input_box.x+5, input_box.y+5))
             # Blit the input_box rect.
-                pygame.draw.rect(SCREEN, color, input_box, 2)
-
+            pygame.draw.rect(SCREEN, color, input_box, 2)
+        drawGrid()
         pygame.display.update()
     
     
