@@ -12,11 +12,20 @@ import tracemalloc
 
 pygame.font.init()
 myfont = pygame.font.SysFont("comicsans",40)
-litfont = pygame.font.SysFont("comicsans",30)
+litfont = pygame.font.SysFont("comicsansms",30)
 
 
 BLACK = (0, 0, 0)
 WHITE = (200, 200, 200)
+list_color = [[250,128,114],    #Salmon
+              [0,0,255],        #Blue
+              [255,255,0],      #Yellow
+              [0,255,255],      #Aqua
+              [255,0,255],      #Magenta
+              [128,0,128],      #Navy
+              [0,128,128],      #Teal
+              [220,20,60],      #Crimson
+              [0,255,0]]        #lime
 
 WIDTH,HEIGHT = 1366,768
 SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
@@ -89,10 +98,10 @@ class DFS():        #depth first search
         # print('Root' + ':' + table[self.rootrow][self.rootcol])
 
     def search(self):
-        #print('x =',self.x,'y = ',self.y,'dir = ',self.dir)
+        #print('x =',self.row,'y = ',self.column,'dir = ',self.dir)
         
-        #print(self.directory[self.dir] + ':' + table[self.x][self.y])
-        self.string = self.string + table[self.x][self.y]
+        #print(self.directory[self.dir] + ':' + table[self.row][self.column])
+        self.string = self.string + table[self.row][self.column]
         #print(self.string)
         if self.string in self.words:
             print("------------------------------------------------------")
@@ -126,17 +135,17 @@ class DFS():        #depth first search
                 print(f'mem : {self.CurrentMem} bytes peak : {self.PeakMem} bytes Total Time :{self.Timeconsumption} ms')
         if (self.dir == 0):
             #search(PosX-1, PosY+1, string, dir, position)
-            self.x,self.y =  self.x-1,self.y+1
+            self.row,self.column =  self.row-1,self.column+1
         elif (self.dir == 1):
             #search(PosX, PosY+1, string, dir, position)
-            self.y =  self.y+1
+            self.column =  self.column+1
         elif (self.dir == 2):
             #search(PosX+1, PosY, string, dir, position)
-            self.x,self.y =  self.x+1,self.y+1
+            self.row,self.column =  self.row+1,self.column+1
         elif (self.dir == 3):
             #search(PosX + 1, PosY+1, string, dir, position)
-            self.x =  self.x+1
-        if(self.x < 0 or self.x > 9) or (self.y < 0 or self.y > 9):
+            self.row =  self.row+1
+        if(self.row < 0 or self.row > 9) or (self.column < 0 or self.column > 9):
             self.dir += 1
             if(self.dir > 3):
                 self.dir = 0
@@ -161,42 +170,43 @@ class DFS():        #depth first search
             end_x = int(end_x)
             end_y = int(end_y)
             if (vis[3] == 0):
-                
-                while start_x <= end_x and start_y >= end_y :
+                linecount = 0
+                while linecount <= (len(vis[0])-1)*(blockSize) :
                     #print(start_x, start_y)
-                    pygame.draw.circle(SCREEN, (0, 255, 0),
-                                       (start_x * blockSize + blockSize // 2 + 2,
-                                        start_y * blockSize + blockSize // 2 + 5),
-                                       blockSize // 2, 0)
-                    start_x += 1
-                    start_y -= 1
+                    linecount += 1
+                    pygame.draw.circle(SCREEN, (list_color[index]),
+                                       (start_x * blockSize + blockSize // 2 + 7+linecount,
+                                        start_y * blockSize + blockSize // 2 + 5-linecount),
+                                       blockSize // 3 + 4, 0)
             if(vis[3] == 1):
-                while start_x <= end_x :
+                linecount = 0
+                while linecount <= (len(vis[0])-1)*(blockSize):
                     #print(start_x, start_y)
-                    pygame.draw.circle(SCREEN, (255, 255, 255),
-                                   (start_x * blockSize + blockSize // 2 + 2,
+                    linecount += 1
+                    pygame.draw.circle(SCREEN, (list_color[index]),
+                                   (start_x * blockSize + blockSize // 2 + 2+linecount,
                                     start_y * blockSize + blockSize // 2 + 5),
-                                   blockSize // 2, 0)
-                    start_x+=1
+                                   blockSize // 3 + 4, 0)
             if (vis[3] == 2):
-                while start_x <= end_x and start_y <= end_y :
+                linecount = 0
+                while linecount <= (len(vis[0])-1)*(blockSize):
                     #print(start_x, start_y)
-                    pygame.draw.circle(SCREEN, (0, 255, 0),
-                                       (start_x * blockSize + blockSize // 2 + 2,
-                                        start_y * blockSize + blockSize // 2 + 5),
-                                       blockSize // 2, 0)
-                    start_x += 1
-                    start_y += 1
+                    linecount += 1
+                    pygame.draw.circle(SCREEN, (list_color[index]),
+                                       (start_x * blockSize + blockSize // 2 + 2+linecount,
+                                        start_y * blockSize + blockSize // 2 + 5+linecount),
+                                       blockSize // 3+4, 0)
             if(vis[3] == 3):
-                while start_y <= end_y :
+                linecount = 0
+                while linecount <= (len(vis[0])-1)*(blockSize):
                     #print(start_x, start_y)
-                    pygame.draw.circle(SCREEN, (0, 255, 0),
+                    linecount += 1
+                    pygame.draw.circle(SCREEN, (list_color[index]),
                                    (start_x * blockSize + blockSize // 2 + 2,
-                                    start_y * blockSize + blockSize // 2 + 5),
-                                   blockSize // 2, 0)
-                    start_y+=1
+                                    start_y * blockSize + blockSize // 2 + 5+linecount),
+                                   blockSize // 3+4, 0)
 
-        txt = [f'mem : {self.CurrentMem} bytes',f'peak : {self.PeakMem} bytes',f'Total Time :{self.Timeconsumption} ms']
+        txt = [f'mem : {self.CurrentMem:.3f} bytes',f'peak : {self.PeakMem:.3f} bytes',f'Total Time :{self.Timeconsumption:.3f} ms']
         stat1 = litfont.render(txt[0], True, WHITE)
         stat2 = litfont.render(txt[1], True, WHITE)
         stat3 = litfont.render(txt[2], True, WHITE)
@@ -267,7 +277,7 @@ class IDDFS():       #iterative deepening depth first search
         #print('temp',self.temp_level,'max',self.max_level)
         
         #print(self.directory[self.dir])
-        self.string = self.string + table[self.x][self.y]
+        self.string = self.string + table[self.row][self.column]
         #print(self.string)
         if self.string in self.words:
             print("------------------------------------------------------")
@@ -300,18 +310,18 @@ class IDDFS():       #iterative deepening depth first search
             print(f'mem : {self.CurrentMem} bytes peak : {self.PeakMem} bytes Total Time :{self.Timeconsumption} ms')
         if (self.dir == 0 ):
             #search(PosX-1, PosY+1, string, dir, position)
-            self.x,self.y =  self.x-1,self.y+1
+            self.row,self.column =  self.row-1,self.column+1
         elif (self.dir == 1):
             #search(PosX, PosY+1, string, dir, position)
-            self.y =  self.y+1
+            self.column =  self.column+1
         elif (self.dir == 2):
             #search(PosX+1, PosY, string, dir, position)
-            self.x,self.y =  self.x+1,self.y+1
+            self.row,self.column =  self.row+1,self.column+1
         elif (self.dir == 3):
             #search(PosX + 1, PosY+1, string, dir, position)
-            self.x =  self.x+1
+            self.row =  self.row+1
         self.temp_level += 1
-        if(self.x < 0 or self.x > 9) or (self.y < 0 or self.y > 9) or (self.temp_level > self.max_level):
+        if(self.row < 0 or self.row > 9) or (self.column < 0 or self.column > 9) or (self.temp_level > self.max_level):
             self.temp_level = 0
             self.dir += 1
             if(self.dir > 3):
@@ -337,43 +347,44 @@ class IDDFS():       #iterative deepening depth first search
             end_x = int(end_x)
             end_y = int(end_y)
             if (vis[3] == 0):
-                
-                while start_x <= end_x and start_y >= end_y :
+                linecount = 0
+                while linecount <= (len(vis[0])-1)*(blockSize) :
                     #print(start_x, start_y)
-                    pygame.draw.circle(SCREEN, (0, 255, 0),
-                                       (start_x * blockSize + blockSize // 2 + 902,
-                                        start_y * blockSize + blockSize // 2 + 5),
-                                       blockSize // 2, 0)
-                    start_x += 1
-                    start_y -= 1
+                    linecount += 1
+                    pygame.draw.circle(SCREEN, (list_color[index]),
+                                       (start_x * blockSize + blockSize // 2 + 907+linecount,
+                                        start_y * blockSize + blockSize // 2 + 5-linecount),
+                                       blockSize // 3 + 4, 0)
             if(vis[3] == 1):
-                while start_x <= end_x :
+                linecount = 0
+                while linecount <= (len(vis[0])-1)*(blockSize):
                     #print(start_x, start_y)
-                    pygame.draw.circle(SCREEN, (255, 255, 255),
-                                   (start_x * blockSize + blockSize // 2 + 902,
+                    linecount += 1
+                    pygame.draw.circle(SCREEN, (list_color[index]),
+                                   (start_x * blockSize + blockSize // 2 + 902+linecount,
                                     start_y * blockSize + blockSize // 2 + 5),
-                                   blockSize // 2, 0)
-                    start_x+=1
+                                   blockSize // 3 + 4, 0)
             if (vis[3] == 2):
-                while start_x <= end_x and start_y <= end_y :
+                linecount = 0
+                while linecount <= (len(vis[0])-1)*(blockSize):
                     #print(start_x, start_y)
-                    pygame.draw.circle(SCREEN, (0, 255, 0),
-                                       (start_x * blockSize + blockSize // 2 + 902,
-                                        start_y * blockSize + blockSize // 2 + 5),
-                                       blockSize // 2, 0)
-                    start_x += 1
-                    start_y += 1
+                    linecount += 1
+                    pygame.draw.circle(SCREEN, (list_color[index]),
+                                       (start_x * blockSize + blockSize // 2 + 902+linecount,
+                                        start_y * blockSize + blockSize // 2 + 5+linecount),
+                                       blockSize // 3+4, 0)
             if(vis[3] == 3):
-                while start_y <= end_y :
+                linecount = 0
+                while linecount <= (len(vis[0])-1)*(blockSize):
                     #print(start_x, start_y)
-                    pygame.draw.circle(SCREEN, (0, 255, 0),
+                    linecount += 1
+                    pygame.draw.circle(SCREEN, (list_color[index]),
                                    (start_x * blockSize + blockSize // 2 + 902,
-                                    start_y * blockSize + blockSize // 2 + 5),
-                                   blockSize // 2, 0)
-                    start_y+=1
+                                    start_y * blockSize + blockSize // 2 + 5+linecount),
+                                   blockSize // 3+4, 0)
 
-        txt = [f'mem : {self.CurrentMem} bytes', f'peak : {self.PeakMem} bytes',
-               f'Total Time :{self.Timeconsumption} ms']
+
+        txt = [f'mem : {self.CurrentMem:.3f} bytes',f'peak : {self.PeakMem:.3f} bytes',f'Total Time :{self.Timeconsumption:.3f} ms']
         stat1 = litfont.render(txt[0], True, WHITE)
         stat2 = litfont.render(txt[1], True, WHITE)
         stat3 = litfont.render(txt[2], True, WHITE)
@@ -411,7 +422,7 @@ def main():
     StartResetButton_status = True
     InputBox_status = True
 
-    FPS = 60
+    FPS = 600
     CLOCK = pygame.time.Clock()
     timer = pygame.time.get_ticks()
     timer2 = pygame.time.get_ticks()
@@ -446,14 +457,14 @@ def main():
         iddfs.draw()
 
         if InputBox_status:
-                txt_surface = myfont.render(text, True, color)
+            txt_surface = myfont.render(text, True, color)
             # Resize the box if the text is too long.
-                width = max(200, txt_surface.get_width()+10)
-                input_box.w = width
+            width = max(200, txt_surface.get_width()+10)
+            input_box.w = width
             # Blit the text.
-                SCREEN.blit(txt_surface, (input_box.x+5, input_box.y+5))
+            SCREEN.blit(txt_surface, (input_box.x+5, input_box.y+5))
             # Blit the input_box rect.
-            pygame.draw.rect(SCREEN, color, input_box, 2)
+            pygame.draw.rect(SCREEN, color, input_box,2)
         drawGrid()
         pygame.display.update()
     
@@ -545,9 +556,12 @@ def drawGrid():
     for x in range(10):
         for y in range(10):
             textsurface = myfont.render(table[x][y], True, (255, 255, 255)) #text / Anti aliasing / color (in this case it's white)
-            SCREEN.blit(textsurface,(y*blockSize+15,x*blockSize+15))
-
-            SCREEN.blit(textsurface,(y*blockSize+15+900,x*blockSize+15))
+            if table[x][y] == 'I':  #solve all the i's misplace
+                SCREEN.blit(textsurface,(y*blockSize+21,x*blockSize+15))
+                SCREEN.blit(textsurface,(y*blockSize+21+900,x*blockSize+15))
+            else:
+                SCREEN.blit(textsurface,(y*blockSize+15,x*blockSize+15))
+                SCREEN.blit(textsurface,(y*blockSize+15+900,x*blockSize+15))
 
 def puzzle_gen():
     global words,table
