@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <list default="true" id="aed4c867-7b2f-41c9-beec-ade46f75beab" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/word-search.py" beforeDir="false" afterPath="$PROJECT_DIR$/word-search.py" afterDir="false" />
     </list>
 =======
     <list default="true" id="aed4c867-7b2f-41c9-beec-ade46f75beab" name="Default Changelist" comment="" />
+>>>>>>> Stashed changes
+=======
+    <list default="true" id="07cffcaa-bb42-4d01-b741-e9f7245d98a4" name="Default Changelist" comment="" />
 >>>>>>> Stashed changes
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,7 +20,11 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+<<<<<<< Updated upstream
   <component name="ProjectId" id="1hNH9XAjYWUJ5zRKRgCPDPvTzVx" />
+=======
+  <component name="ProjectId" id="1hSURa7JoACsQgDwEeC5f0VHU3b" />
+>>>>>>> Stashed changes
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -24,6 +32,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
   </component>
+<<<<<<< Updated upstream
   <component name="RunManager" selected="Python.word-search">
     <configuration name="IDDFS2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Word-Search---Artificial-Intelligence" />
@@ -130,4 +139,17 @@
     </state>
     <state x="803" y="305" key="refactoring.ChangeSignatureDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1599871095424" />
   </component>
+=======
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="07cffcaa-bb42-4d01-b741-e9f7245d98a4" name="Default Changelist" comment="" />
+      <created>1600003980630</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1600003980630</updated>
+    </task>
+    <servers />
+  </component>
+>>>>>>> Stashed changes
 </project>

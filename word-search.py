@@ -21,15 +21,25 @@ WIDTH, HEIGHT = 1366, 768
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Words Search")
 
+list_color = [[250,128,114],    #Salmon
+              [0,0,255],        #Blue
+              [255,255,0],      #Yellow
+              [0,255,255],      #Aqua
+              [255,0,255],      #Magenta
+              [128,0,128],      #Navy
+              [0,128,128],      #Teal
+              [220,20,60],      #Crimson
+              [0,255,0]]        #lime
+
 blockSize = 40  # Set the size of the grid block
 table = [['C', 'O', 'N', 'N', 'E', 'C', 'T', 'I', 'O', 'N'],
          ['F', 'C', 'E', 'L', 'L', 'P', 'H', 'O', 'N', 'E'],
-         ['A', 'R', 'Z', 'T', 'S', 'I', 'E', 'E', 'C', 'H'],
+         ['A', 'R', 'Z', 'T', 'S', 'P', 'E', 'E', 'C', 'H'],
          ['C', 'B', 'T', 'M', 'A', 'L', 'U', 'J', 'G', 'G'],
-         ['I', 'A', 'L', 'X', 'F', 'X', 'U', 'G', 'B', 'I'],
-         ['A', 'S', 'E', 'N', 'I', 'H', 'C', 'A', 'M', 'P'],
+         ['I', 'A', 'L', 'X', 'F', 'I', 'U', 'G', 'B', 'I'],
+         ['A', 'S', 'E', 'N', 'I', 'H', 'C', 'L', 'M', 'P'],
          ['L', 'L', 'H', 'P', 'B', 'E', 'M', 'O', 'S', 'H'],
-         ['K', 'R', 'G', 'R', 'J', 'S', 'I', 'L', 'I', 'O'],
+         ['K', 'R', 'G', 'R', 'J', 'S', 'I', 'R', 'I', 'O'],
          ['M', 'G', 'Z', 'D', 'E', 'E', 'P', 'S', 'M', 'N'],
          ['D', 'I', 'N', 'T', 'E', 'R', 'N', 'E', 'T', 'E']]
 
@@ -100,7 +110,7 @@ class DFS():  # depth first search
             self.path.append(self.string)
             self.words.remove(self.string)
             #self.visited.append(self.string)
-            # print(self.visited)
+            print(self.visited)
             self.visit_each[0] = self.string
             if (self.dir == 0):
                 self.visit_each[1] = str(self.column - len(self.string)+1) + ',' + str(self.row + len(self.string)-1)
@@ -154,7 +164,7 @@ class DFS():  # depth first search
                            (self.column * blockSize + blockSize // 2 + 2, self.row * blockSize + blockSize // 2 + 5),
                            blockSize // 2, 2)
         for index,vis in enumerate(self.visited):
-            print(index,vis)
+            #print(index,vis)
             start_x,start_y = vis[1].split(',')
             end_x,end_y = vis[2].split(',')
             # print(start_x,start_y)
@@ -165,8 +175,8 @@ class DFS():  # depth first search
             end_y = int(end_y)
             if (vis[3] == 0):
                 while start_x <= end_x and start_y >= end_y :
-                    print(start_x, start_y)
-                    pygame.draw.circle(SCREEN, (0, 255, 0),
+                    #print(start_x, start_y)
+                    pygame.draw.circle(SCREEN, 	#FFFFFF,
                                        (start_x * blockSize + blockSize // 2 + 2,
                                         start_y * blockSize + blockSize // 2 + 5),
                                        blockSize // 2, 2)
@@ -174,7 +184,7 @@ class DFS():  # depth first search
                     start_y -= 1
             if(vis[3] == 1):
                 while start_x <= end_x :
-                    print(start_x, start_y)
+                    #print(start_x, start_y)
                     pygame.draw.circle(SCREEN, (255, 255, 255),
                                    (start_x * blockSize + blockSize // 2 + 2,
                                     start_y * blockSize + blockSize // 2 + 5),
@@ -182,7 +192,7 @@ class DFS():  # depth first search
                     start_x+=1
             if (vis[3] == 2):
                 while start_x <= end_x and start_y <= end_y :
-                    print(start_x, start_y)
+                    #print(start_x, start_y)
                     pygame.draw.circle(SCREEN, (0, 255, 0),
                                        (start_x * blockSize + blockSize // 2 + 2,
                                         start_y * blockSize + blockSize // 2 + 5),
@@ -191,7 +201,7 @@ class DFS():  # depth first search
                     start_y += 1
             if(vis[3] == 3):
                 while start_y <= end_y :
-                    print(start_x, start_y)
+                    #print(start_x, start_y)
                     pygame.draw.circle(SCREEN, (0, 255, 0),
                                    (start_x * blockSize + blockSize // 2 + 2,
                                     start_y * blockSize + blockSize // 2 + 5),
@@ -403,8 +413,10 @@ def main():
     def redraw():
         SCREEN.fill(BLACK)
         drawGrid()
-
+        font = pygame.font.SysFont('comicsansms', 25)
         pygame.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
+        SCREEN.blit(font.render('START', True, (255, 0, 0)), StartResetButton)
+
         dfs.draw()
         iddfs.draw()
 
@@ -417,6 +429,7 @@ def main():
             SCREEN.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
             # Blit the input_box rect.
             pygame.draw.rect(SCREEN, color, input_box, 2)
+            SCREEN.blit(font.render('Input Delay.', True, (0, 255, 0)), (790, 580))
 
         pygame.display.update()
 
