@@ -156,10 +156,10 @@ class DFS():        #depth first search
     def draw(self):
         #draw search circle
         pygame.draw.circle(SCREEN, (0, 0, 255),
-                           (self.rootcol * blockSize + blockSize // 2 + 2, self.rootrow * blockSize + blockSize // 2 + 5),
+                           (self.rootcol * blockSize + blockSize // 2 + 2+30, self.rootrow * blockSize + blockSize // 2 + 5+30),
                            blockSize // 2, 2)
         pygame.draw.circle(SCREEN, (0, 255, 0),
-                           (self.column * blockSize + blockSize // 2 + 2, self.row * blockSize + blockSize // 2 + 5),
+                           (self.column * blockSize + blockSize // 2 + 2+30, self.row * blockSize + blockSize // 2 + 5+30),
                            blockSize // 2, 2)
         for index,vis in enumerate(self.visited):
             #print(index,vis)
@@ -175,8 +175,8 @@ class DFS():        #depth first search
                     #print(start_x, start_y)
                     linecount += 1
                     pygame.draw.circle(SCREEN, (list_color[index]),
-                                       (start_x * blockSize + blockSize // 2 + 7+linecount,
-                                        start_y * blockSize + blockSize // 2 + 5-linecount),
+                                       (start_x * blockSize + blockSize // 2 + 7+linecount+30,
+                                        start_y * blockSize + blockSize // 2 + 5-linecount+30),
                                        blockSize // 3 + 4, 0)
             if(vis[3] == 1):
                 linecount = 0
@@ -184,8 +184,8 @@ class DFS():        #depth first search
                     #print(start_x, start_y)
                     linecount += 1
                     pygame.draw.circle(SCREEN, (list_color[index]),
-                                   (start_x * blockSize + blockSize // 2 + 2+linecount,
-                                    start_y * blockSize + blockSize // 2 + 5),
+                                   (start_x * blockSize + blockSize // 2 + 2+linecount+30,
+                                    start_y * blockSize + blockSize // 2 + 5+30),
                                    blockSize // 3 + 4, 0)
             if (vis[3] == 2):
                 linecount = 0
@@ -193,8 +193,8 @@ class DFS():        #depth first search
                     #print(start_x, start_y)
                     linecount += 1
                     pygame.draw.circle(SCREEN, (list_color[index]),
-                                       (start_x * blockSize + blockSize // 2 + 2+linecount,
-                                        start_y * blockSize + blockSize // 2 + 5+linecount),
+                                       (start_x * blockSize + blockSize // 2 + 2+linecount+30,
+                                        start_y * blockSize + blockSize // 2 + 5+linecount+30),
                                        blockSize // 3+4, 0)
             if(vis[3] == 3):
                 linecount = 0
@@ -202,8 +202,8 @@ class DFS():        #depth first search
                     #print(start_x, start_y)
                     linecount += 1
                     pygame.draw.circle(SCREEN, (list_color[index]),
-                                   (start_x * blockSize + blockSize // 2 + 2,
-                                    start_y * blockSize + blockSize // 2 + 5+linecount),
+                                   (start_x * blockSize + blockSize // 2 + 2+30,
+                                    start_y * blockSize + blockSize // 2 + 5+linecount+30),
                                    blockSize // 3+4, 0)
 
         txt = [f'mem : {self.CurrentMem:.3f} bytes',f'peak : {self.PeakMem:.3f} bytes',f'Total Time :{self.Timeconsumption:.3f} ms']
@@ -332,10 +332,10 @@ class IDDFS():       #iterative deepening depth first search
 
     def draw(self):
         pygame.draw.circle(SCREEN, (0, 0, 255),
-                           (self.rootcol * blockSize + blockSize // 2 + 902, self.rootrow * blockSize + blockSize // 2 + 5),
+                           (self.rootcol * blockSize + blockSize // 2 + 902+30, self.rootrow * blockSize + blockSize // 2 + 5+30),
                            blockSize // 2, 2)
         pygame.draw.circle(SCREEN, (0, 255, 0),
-                           (self.column * blockSize + blockSize // 2 + 902, self.row * blockSize + blockSize // 2 + 5),
+                           (self.column * blockSize + blockSize // 2 + 902+30, self.row * blockSize + blockSize // 2 + 5+30),
                            blockSize // 2, 2)
 
         for index,vis in enumerate(self.visited):
@@ -352,8 +352,8 @@ class IDDFS():       #iterative deepening depth first search
                     #print(start_x, start_y)
                     linecount += 1
                     pygame.draw.circle(SCREEN, (list_color[index]),
-                                       (start_x * blockSize + blockSize // 2 + 907+linecount,
-                                        start_y * blockSize + blockSize // 2 + 5-linecount),
+                                       (start_x * blockSize + blockSize // 2 + 907+linecount+30,
+                                        start_y * blockSize + blockSize // 2 + 5-linecount+30),
                                        blockSize // 3 + 4, 0)
             if(vis[3] == 1):
                 linecount = 0
@@ -361,8 +361,8 @@ class IDDFS():       #iterative deepening depth first search
                     #print(start_x, start_y)
                     linecount += 1
                     pygame.draw.circle(SCREEN, (list_color[index]),
-                                   (start_x * blockSize + blockSize // 2 + 902+linecount,
-                                    start_y * blockSize + blockSize // 2 + 5),
+                                   (start_x * blockSize + blockSize // 2 + 902+linecount+30,
+                                    start_y * blockSize + blockSize // 2 + 5+30),
                                    blockSize // 3 + 4, 0)
             if (vis[3] == 2):
                 linecount = 0
@@ -370,8 +370,8 @@ class IDDFS():       #iterative deepening depth first search
                     #print(start_x, start_y)
                     linecount += 1
                     pygame.draw.circle(SCREEN, (list_color[index]),
-                                       (start_x * blockSize + blockSize // 2 + 902+linecount,
-                                        start_y * blockSize + blockSize // 2 + 5+linecount),
+                                       (start_x * blockSize + blockSize // 2 + 902+linecount+30,
+                                        start_y * blockSize + blockSize // 2 + 5+linecount+30),
                                        blockSize // 3+4, 0)
             if(vis[3] == 3):
                 linecount = 0
@@ -379,8 +379,8 @@ class IDDFS():       #iterative deepening depth first search
                     #print(start_x, start_y)
                     linecount += 1
                     pygame.draw.circle(SCREEN, (list_color[index]),
-                                   (start_x * blockSize + blockSize // 2 + 902,
-                                    start_y * blockSize + blockSize // 2 + 5+linecount),
+                                   (start_x * blockSize + blockSize // 2 + 902+30,
+                                    start_y * blockSize + blockSize // 2 + 5+linecount+30),
                                    blockSize // 3+4, 0)
 
 
@@ -428,21 +428,17 @@ def main():
     timer2 = pygame.time.get_ticks()
 
     #define button
-    StartResetButton = pygame.Rect((WIDTH*2/7)+200, HEIGHT*4/5, 100, 50)
+    BState = 'START'
+    StartResetButton = pygame.Rect((WIDTH*2/7)+250, HEIGHT/5, 110, 50)
 
     #define input box
-    input_box = pygame.Rect((WIDTH*2/7)+400, (HEIGHT*4/5), 100, 50)
+    input_box = pygame.Rect((WIDTH*2/7)+270, (HEIGHT/5+150), 100, 50)
     color_inactive = pygame.Color('lightskyblue3')
     color_active = pygame.Color('dodgerblue2')
     color = color_inactive
     active = False
     text = ''
     #--------------
-
-    #define text 'Delay: '
-    text_delay = myfont.render('Delay:', True, (255,255,0)) 
-    textRect = text_delay.get_rect()  
-    textRect.center = ((WIDTH*2/7)+350,HEIGHT*4/5+25) 
 
     dfs = DFS()
     iddfs = IDDFS()
@@ -453,28 +449,32 @@ def main():
         
 
         pygame.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
+        SCREEN.blit(litfont.render(BState, True, (255,0,0)), StartResetButton)
         dfs.draw()
         iddfs.draw()
 
         if InputBox_status:
-            txt_surface = myfont.render(text, True, color)
+                txt_surface = myfont.render(text[1:], True, color)
             # Resize the box if the text is too long.
-            width = max(200, txt_surface.get_width()+10)
-            input_box.w = width
+                width = max(200, txt_surface.get_width()+10)
+                input_box.w = width
             # Blit the text.
-            SCREEN.blit(txt_surface, (input_box.x+5, input_box.y+5))
+                SCREEN.blit(txt_surface, (input_box.x+5, input_box.y+5))
             # Blit the input_box rect.
-            pygame.draw.rect(SCREEN, color, input_box,2)
+                pygame.draw.rect(SCREEN, color, input_box, 2)
+                SCREEN.blit(litfont.render('Delay :', True, (0,255,0)), ((WIDTH*2/7)+170, (HEIGHT/5+150)))
+
         drawGrid()
         pygame.display.update()
     
-    
+    text = '0'
     while GAME:
         CLOCK.tick(FPS)
         t1 = pygame.time.get_ticks() - timer
         t2 = pygame.time.get_ticks() - timer2
+
+        delay = int(text)
         #DFS
-        delay = 0
         if(t1 > delay and dfs.run):
             timer = pygame.time.get_ticks()
             
@@ -526,12 +526,14 @@ def main():
                             iddfs.run = True
                             InputBox_status = False
                             StartResetButton_status = not StartResetButton_status
+                            BState = 'RESET'
                         else:
                             print("------------------------RESET----------------------------")
                             dfs.reset()
                             iddfs.reset()
                             InputBox_status = True
                             StartResetButton_status = not StartResetButton_status
+                            BState = 'START'
                     if input_box.collidepoint(event.pos):
                         active = not active
                     else:
@@ -545,7 +547,7 @@ def main():
                     if event.key == pygame.K_BACKSPACE:
                         text = text[:-1]
                         #print(text)
-                    elif ord(event.unicode) > 0 and ord(event.unicode) <= 1000:
+                    else:
                         text += event.unicode
 
                         #print(text)
@@ -553,15 +555,18 @@ def main():
 
 
 def drawGrid():
+    #pygame.draw.rect(Surface, color, Rect, width=0)
+    pygame.draw.rect(SCREEN, (255, 255, 255),(blockSize-10, blockSize-10,10*blockSize+10,10*blockSize+10), 4)
+    pygame.draw.rect(SCREEN, (255, 255, 255),(blockSize+890, blockSize-10,10*blockSize+10,10*blockSize+10), 4)
     for x in range(10):
         for y in range(10):
             textsurface = myfont.render(table[x][y], True, (255, 255, 255)) #text / Anti aliasing / color (in this case it's white)
             if table[x][y] == 'I':  #solve all the i's misplace
-                SCREEN.blit(textsurface,(y*blockSize+21,x*blockSize+15))
-                SCREEN.blit(textsurface,(y*blockSize+21+900,x*blockSize+15))
+                SCREEN.blit(textsurface,(y*blockSize+21+30,x*blockSize+15+30))
+                SCREEN.blit(textsurface,(y*blockSize+21+900+30,x*blockSize+15+30))
             else:
-                SCREEN.blit(textsurface,(y*blockSize+15,x*blockSize+15))
-                SCREEN.blit(textsurface,(y*blockSize+15+900,x*blockSize+15))
+                SCREEN.blit(textsurface,(y*blockSize+15+30,x*blockSize+15+30))
+                SCREEN.blit(textsurface,(y*blockSize+15+900+30,x*blockSize+15+30))
 
 def puzzle_gen():
     global words,table
