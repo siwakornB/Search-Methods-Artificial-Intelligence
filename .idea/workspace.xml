@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="aed4c867-7b2f-41c9-beec-ade46f75beab" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/word-search.py" beforeDir="false" afterPath="$PROJECT_DIR$/word-search.py" afterDir="false" />
     </list>
+=======
+    <list default="true" id="aed4c867-7b2f-41c9-beec-ade46f75beab" name="Default Changelist" comment="" />
+>>>>>>> Stashed changes
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -82,6 +86,7 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
+<<<<<<< Updated upstream
     <state width="1899" height="325" key="GridCell.Tab.0.bottom" timestamp="1599906264185">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -98,6 +103,24 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="325" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1599906264184" />
+=======
+    <state width="1899" height="325" key="GridCell.Tab.0.bottom" timestamp="1599906651879">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="325" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1599906651879" />
+    <state width="1899" height="325" key="GridCell.Tab.0.center" timestamp="1599906651879">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="325" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1599906651879" />
+    <state width="1899" height="325" key="GridCell.Tab.0.left" timestamp="1599906651879">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="325" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1599906651879" />
+    <state width="1899" height="325" key="GridCell.Tab.0.right" timestamp="1599906651879">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="325" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1599906651879" />
+>>>>>>> Stashed changes
     <state x="777" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1599875656578">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
