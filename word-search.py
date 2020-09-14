@@ -31,8 +31,9 @@ WIDTH,HEIGHT = 1366,768
 SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Words Search")
 
+
 blockSize = 40  # Set the size of the grid block
-table = [['C', 'O', 'N', 'N', 'E', 'C', 'T', 'I', 'O', 'N'],
+tables = [['C', 'O', 'N', 'N', 'E', 'C', 'T', 'I', 'O', 'N'],
          ['F', 'C', 'E', 'L', 'L', 'P', 'H', 'O', 'N', 'E'],
          ['A', 'R', 'Z', 'T', 'S', 'P', 'E', 'E', 'C', 'H'],
          ['C', 'B', 'T', 'M', 'A', 'L', 'U', 'J', 'G', 'G'],
@@ -42,10 +43,11 @@ table = [['C', 'O', 'N', 'N', 'E', 'C', 'T', 'I', 'O', 'N'],
          ['K', 'L', 'G', 'R', 'J', 'S', 'I', 'R', 'I', 'O'],
          ['M', 'R', 'Z', 'D', 'E', 'E', 'P', 'S', 'M', 'N'],
          ['D', 'I', 'N', 'T', 'E', 'R', 'N', 'E', 'T', 'E']]
-
-WORDS = ['AI', 'FACIAL', 'SPEECH', 'CONNECTION', 'INTERNET',
+table = tables.copy()
+WORDSs = ['AI', 'FACIAL', 'SPEECH', 'CONNECTION', 'INTERNET',
          'IPHONE', 'SIRI', 'CELLPHONE','ML' ]  # 'MACHINES','SPEED'
-WORDSs = ['AI','ML']
+WORDS = WORDSs.copy()
+WORDSm = ['AI','ML']
 
 class Timer:
     def __init__(self):
@@ -451,7 +453,6 @@ def main():
     
     def redraw():
         SCREEN.fill(BLACK)
-        
 
         pygame.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
         SCREEN.blit(litfont.render(BState, True, (255,0,0)), StartResetButton)
@@ -479,7 +480,7 @@ def main():
         t2 = pygame.time.get_ticks() - timer2
 
         delay = int(text)
-        #DFS
+        #--------DFS----------------
         if(t1 > delay and dfs.run):
             timer = pygame.time.get_ticks()
             
@@ -498,7 +499,7 @@ def main():
             tim = (datetime.datetime.now() - starttime1)
             dfs.Timeconsumption += tim.microseconds/1000
             tracemalloc.stop()
-            #------ IDDFS -----------
+        #------ IDDFS -----------
         if(t2 > delay and iddfs.run):
             timer2 = pygame.time.get_ticks()
 
@@ -549,12 +550,26 @@ def main():
                     if event.key == pygame.K_RETURN:
                         #print(text)
                         text = ''
-                    if event.key == pygame.K_BACKSPACE:
+                    elif event.key == pygame.K_BACKSPACE:
                         text = text[:-1]
                         #print(text)
                     else:
                         text += event.unicode
-
+                if event.key == pygame.K_SPACE:
+                    if StartResetButton_status:
+                        puzzle_gen()
+                    else:
+                        print('pause')
+                        if len(dfs.words) > 0:
+                            dfs.run = not dfs.run
+                        if len(iddfs.words) > 0:
+                            iddfs.run = not iddfs.run
+                elif event.key == pygame.K_LALT:
+                    if StartResetButton_status:
+                        global table
+                        table = tables.copy()
+                        dfs.words = WORDSs.copy()
+                        iddfs.words = WORDSs.copy()
                         #print(text)
         
 
