@@ -46,8 +46,7 @@ table = [['C', 'O', 'N', 'N', 'E', 'C', 'T', 'I', 'O', 'N'],
 WORDS = ['AI', 'FACIAL', 'SPEECH', 'CONNECTION', 'INTERNET',
          'IPHONE', 'SIRI', 'CELLPHONE','ML' ]  # 'MACHINES','SPEED'
 WORDSs = ['AI','ML']
-words = WORDS.copy()
-visited = []
+
 class Timer:
     def __init__(self):
         self.accumulated_time = 0
@@ -115,7 +114,7 @@ class DFS():        #depth first search
             elif (self.dir == 1):
                 visit_each.append(str(self.column - len(self.string) + 1) + ',' + str(self.row))
             elif (self.dir == 2):
-                visit_each.append(str(self.column - 1) + ',' + str(self.row - len(self.string) + 1))
+                visit_each.append(str(self.column - len(self.string) + 1) + ',' + str(self.row - len(self.string) + 1))
             elif (self.dir == 3):
                 visit_each.append(str(self.column) + ',' + str(self.row - len(self.string) + 1))
             visit_each.append(str(self.column)+ ',' + str(self.row))
@@ -288,15 +287,18 @@ class IDDFS():       #iterative deepening depth first search
             #-------------------------
             visit_each = []
             visit_each.append(self.string)
+            #section 2 store start position of the word
             if (self.dir == 0):
                 visit_each.append(str(self.column - len(self.string)+1) + ',' + str(self.row + len(self.string)-1))
             elif (self.dir == 1):
                 visit_each.append(str(self.column - len(self.string) + 1) + ',' + str(self.row))
             elif (self.dir == 2):
-                visit_each.append(str(self.column - 1) + ',' + str(self.row - len(self.string) + 1))
+                visit_each.append(str(self.column - len(self.string) + 1) + ',' + str(self.row - len(self.string) + 1))
             elif (self.dir == 3):
                 visit_each.append(str(self.column) + ',' + str(self.row - len(self.string) + 1))
+            #section 3
             visit_each.append(str(self.column)+ ',' + str(self.row))
+            #section 4
             visit_each.append(self.dir)
             self.visited.append(visit_each)
             #-------------------------
@@ -421,7 +423,7 @@ class IDDFS():       #iterative deepening depth first search
 
 def main():
     global StartResetButton_status,InputBox_status
-    
+    puzzle_gen()
     StartResetButton_status = True
     InputBox_status = True
 
@@ -572,10 +574,10 @@ def drawGrid():
                 SCREEN.blit(textsurface,(y*blockSize+15+900+30,x*blockSize+15+30))
 
 def puzzle_gen():
-    global words,table
-    words = ['cat', 'bear', 'tiger', 'lion']
+    global table,WORDS
+    WORDS = ['cat', 'bear', 'tiger', 'lion']
     table = [['0' for i in range(10)] for i in range(10)]
-    result = create_panel(height=10, width=10, words_value_list=words)
+    result = create_panel(height=10, width=10, words_value_list=WORDS)
 
     display_panel(result.get('panel'))
     #convert into 2d array
