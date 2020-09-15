@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <list default="true" id="aed4c867-7b2f-41c9-beec-ade46f75beab" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/word-search.py" beforeDir="false" afterPath="$PROJECT_DIR$/word-search.py" afterDir="false" />
     </list>
@@ -11,6 +12,11 @@
 >>>>>>> Stashed changes
 =======
     <list default="true" id="07cffcaa-bb42-4d01-b741-e9f7245d98a4" name="Default Changelist" comment="" />
+>>>>>>> Stashed changes
+=======
+    <list default="true" id="82fc42ec-d7a7-4abc-800a-9cd7f0ce57de" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/word-search.py" beforeDir="false" afterPath="$PROJECT_DIR$/word-search.py" afterDir="false" />
+    </list>
 >>>>>>> Stashed changes
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,9 +27,13 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   <component name="ProjectId" id="1hNH9XAjYWUJ5zRKRgCPDPvTzVx" />
 =======
   <component name="ProjectId" id="1hSURa7JoACsQgDwEeC5f0VHU3b" />
+>>>>>>> Stashed changes
+=======
+  <component name="ProjectId" id="1hSjgtI02POhxZvLNOaQ5fmlRwN" />
 >>>>>>> Stashed changes
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -32,6 +42,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
   </component>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   <component name="RunManager" selected="Python.word-search">
     <configuration name="IDDFS2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -55,6 +66,9 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+=======
+  <component name="RunManager">
+>>>>>>> Stashed changes
     <configuration name="word-search" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Word-Search---Artificial-Intelligence" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -79,22 +93,34 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.word-search" />
+<<<<<<< Updated upstream
         <item itemvalue="Python.IDDFS2" />
+=======
+>>>>>>> Stashed changes
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+<<<<<<< Updated upstream
       <changelist id="aed4c867-7b2f-41c9-beec-ade46f75beab" name="Default Changelist" comment="" />
       <created>1599844478431</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1599844478431</updated>
+=======
+      <changelist id="82fc42ec-d7a7-4abc-800a-9cd7f0ce57de" name="Default Changelist" comment="" />
+      <created>1600011502342</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1600011502342</updated>
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
   <component name="WindowStateProjectService">
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     <state width="1899" height="325" key="GridCell.Tab.0.bottom" timestamp="1599906264185">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -150,6 +176,41 @@
       <updated>1600003980630</updated>
     </task>
     <servers />
+  </component>
+>>>>>>> Stashed changes
+=======
+    <state width="936" height="282" key="GridCell.Tab.0.bottom" timestamp="1600132080178">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="936" height="282" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1600132080178" />
+    <state width="936" height="282" key="GridCell.Tab.0.center" timestamp="1600132080178">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="936" height="282" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1600132080178" />
+    <state width="936" height="282" key="GridCell.Tab.0.left" timestamp="1600132080178">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="936" height="282" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1600132080178" />
+    <state width="936" height="282" key="GridCell.Tab.0.right" timestamp="1600132080178">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="936" height="282" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1600132080178" />
+    <state width="936" height="347" key="GridCell.Tab.1.bottom" timestamp="1600131944534">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="936" height="347" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1600131944534" />
+    <state width="936" height="347" key="GridCell.Tab.1.center" timestamp="1600131944534">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="936" height="347" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1600131944534" />
+    <state width="936" height="347" key="GridCell.Tab.1.left" timestamp="1600131944534">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="936" height="347" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1600131944534" />
+    <state width="936" height="347" key="GridCell.Tab.1.right" timestamp="1600131944534">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="936" height="347" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1600131944534" />
   </component>
 >>>>>>> Stashed changes
 </project>
