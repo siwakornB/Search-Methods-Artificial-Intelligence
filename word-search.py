@@ -10,7 +10,8 @@ from word_search_puzzle.algorithms import create_panel
 #for memory tracer
 import tracemalloc
 
-pygame.font.init()
+pygame.init()
+#pygame.font.init()
 myfont = pygame.font.SysFont("comicsans",40)
 litfont = pygame.font.SysFont("comicsansms",30)
 
