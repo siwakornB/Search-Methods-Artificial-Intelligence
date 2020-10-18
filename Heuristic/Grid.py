@@ -1,10 +1,10 @@
 import pygame as pg
 
 class Grid:
+    walls = []
     def __init__(self, width, height,blockSize):
         self.width = width
         self.height = height
-        self.walls = []
         self.blockSize = blockSize
         self.connections = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 

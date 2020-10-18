@@ -42,7 +42,7 @@ litfont = pg.font.SysFont("comicsansms",30)
 def main():
     #in-game config
     GAME = True
-    FPS = 600
+    FPS = 600 
     CLOCK = pg.time.Clock()
 
     #define button
@@ -73,7 +73,8 @@ def main():
     #####################################################
     while GAME:
         CLOCK.tick(FPS)
-        
+        dfs = DFS([0,0],[10,10])
+        dfs.search(grid)
         draw()
         for event in pg.event.get():
             if event.type == pg.QUIT:
