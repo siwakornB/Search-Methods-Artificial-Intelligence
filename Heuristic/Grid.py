@@ -6,21 +6,21 @@ class Grid:
         self.width = width
         self.height = height
         self.blockSize = blockSize
-        self.connections = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
     def in_bounds(self, node):
-        return 0 <= node.x < self.width and 0 <= node.y < self.height
+        return 0 <= node[0] < self.width and 0 <= node[1] < self.height
 
     def passable(self, node):
-        return node not in self.walls
+        return tuple(node) not in self.walls
 
     def find_neighbors(self, node):
-        neighbors = [node + connection for connection in self.connections]
-        if (node.x + node.y) % 2:
-            neighbors.reverse()
+        neighbors = [[node[0],node[1]+1],[node[0]+1,node[1]],
+        [node[0],node[1]-1],[node[0]-1,node[1]]]
+        #print(neighbors)
         neighbors = filter(self.in_bounds, neighbors)
         neighbors = filter(self.passable, neighbors)
-        return neighbors
+        #print(neighbors,node)
+        return neighbors 
 
     def draw(self,SCREEN):
         for wall in self.walls:

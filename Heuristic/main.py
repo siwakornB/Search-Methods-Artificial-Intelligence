@@ -1,18 +1,21 @@
 #import necessary lib
 import pygame as pg
+
 pg.init()
 #for memory tracer
 import tracemalloc
+
+from Dfs import DFS
 #for maze_gen
 #from maze_generator import*
 from Grid import Grid
-from Dfs import DFS
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 YELLOW = (255, 255, 0)
+BLUE = (0,0,255)
 DARKGRAY = (40, 40, 40)
 LIGHTGRAY = (90, 90, 90)
 DIMWHITE = (200,200,200)
@@ -51,29 +54,56 @@ def main():
     StartResetButton_status = True
     grid = Grid(20, 20,blockSize)
     
-    grid.walls = walls
+    grid.walls = walls.copy()
 
     def draw():
         SCREEN.fill(BLACK)
-        
+            
         #pg.draw.rect(Surface, color, Rect(x,y,w,h), thickness=0)
-        
+        #maze map
         for x in range(20):
             for y in range(20):
                 pg.draw.rect(SCREEN,LIGHTGRAY,(y*blockSize+blockSize,x*blockSize+blockSize,blockSize,blockSize),1)
                 pg.draw.rect(SCREEN,LIGHTGRAY,(y*blockSize+blockSize+900,x*blockSize+blockSize,blockSize,blockSize),1)
         pg.draw.rect(SCREEN, DIMWHITE,(blockSize, blockSize,20*blockSize,20*blockSize), 4)
         pg.draw.rect(SCREEN, DIMWHITE,(blockSize+900, blockSize,20*blockSize,20*blockSize), 4)
+        #visited
+        for v in dfs.get_visited():
+            rect = pg.Rect((v[0]*blockSize+blockSize+2,v[1]*blockSize+blockSize+2),
+                    (blockSize-4, blockSize-4))
+            pg.draw.rect(SCREEN, LIGHTGRAY, rect)
+        pos_list=dfs.get_stat()
+        #path
+        for p in dfs.get_path():
+            rect = pg.Rect((p[0]*blockSize+blockSize+5,p[1]*blockSize+blockSize+5),
+                    (blockSize-10, blockSize-10))
+            pg.draw.rect(SCREEN, GREEN, rect)
+        pos_list=dfs.get_stat()
+        #for walker
+        for key in pos_list:
+            if key == 'walk':
+                color = BLUE
+            else:
+                color = RED
+            for pos in pos_list[key]:
+                rect = pg.Rect((pos[0]*blockSize+blockSize+2,pos[1]*blockSize+blockSize+2),
+                    (blockSize-4, blockSize-4))
+                pg.draw.rect(SCREEN, color, rect)
         
+        #game button
         pg.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
         SCREEN.blit(litfont.render(BState, True, (255,0,0)), StartResetButton)
         
         grid.draw(SCREEN)
         pg.display.update()
+    
+        
     #####################################################
+    dfs = DFS([0,0],[[19,19]])
+    timer = pg.time.get_ticks()
     while GAME:
-        CLOCK.tick(FPS)
-        dfs = DFS([0,0],[10,10])
+        CLOCK.tick(10)
+        #t1 = pg.time.get_ticks() - timer
         dfs.search(grid)
         draw()
         for event in pg.event.get():
@@ -96,4 +126,10 @@ def main():
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
                     pass
+
+
+
+
+
+
 main()
