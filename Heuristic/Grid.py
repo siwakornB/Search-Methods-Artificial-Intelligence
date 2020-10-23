@@ -14,8 +14,11 @@ class Grid:
         return tuple(node) not in self.walls
 
     def find_neighbors(self, node):
-        neighbors = [[node[0],node[1]+1],[node[0]+1,node[1]],
-        [node[0],node[1]-1],[node[0]-1,node[1]]]
+        #up,right,left,down
+        neighbors = [[node[0],node[1]-1],
+        [node[0]+1,node[1]],
+        [node[0]-1,node[1]],
+        [node[0],node[1]+1]]
         #print(neighbors)
         neighbors = filter(self.in_bounds, neighbors)
         neighbors = filter(self.passable, neighbors)

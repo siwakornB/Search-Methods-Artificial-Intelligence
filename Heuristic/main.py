@@ -45,7 +45,7 @@ litfont = pg.font.SysFont("comicsansms",30)
 def main():
     #in-game config
     GAME = True
-    FPS = 600 
+    FPS = 600
     CLOCK = pg.time.Clock()
 
     #define button
@@ -72,14 +72,15 @@ def main():
             rect = pg.Rect((v[0]*blockSize+blockSize+2,v[1]*blockSize+blockSize+2),
                     (blockSize-4, blockSize-4))
             pg.draw.rect(SCREEN, LIGHTGRAY, rect)
-        pos_list=dfs.get_stat()
+        pos_list=dfs.get_pos()
         #path
         for p in dfs.get_path():
             rect = pg.Rect((p[0]*blockSize+blockSize+5,p[1]*blockSize+blockSize+5),
                     (blockSize-10, blockSize-10))
             pg.draw.rect(SCREEN, GREEN, rect)
-        pos_list=dfs.get_stat()
+        
         #for walker
+        pos_list=dfs.get_pos()
         for key in pos_list:
             if key == 'walk':
                 color = BLUE
@@ -99,12 +100,14 @@ def main():
     
         
     #####################################################
-    dfs = DFS([0,0],[[19,19]])
+    dfs = DFS([0,0],[[19,19],[10,10],[3,2]])
     timer = pg.time.get_ticks()
     while GAME:
-        CLOCK.tick(10)
-        #t1 = pg.time.get_ticks() - timer
-        dfs.search(grid)
+        CLOCK.tick(FPS)
+        t1 = pg.time.get_ticks() - timer
+        if t1 > 10 and not dfs.is_done() and not dfs.is_pause():
+            timer = pg.time.get_ticks()
+            dfs.search(grid)
         draw()
         for event in pg.event.get():
             if event.type == pg.QUIT:
