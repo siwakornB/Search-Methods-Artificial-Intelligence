@@ -9,7 +9,8 @@ class DFS:        #depth first search
         else:
             self.start = start
         self.goal_list = goal
-        self.goal = self.goal_list.pop(0)
+        self.g_temp = goal
+        self.goal = self.g_temp.pop(0)
         self.stack = [] #!!!so fucking necessary
         self.current = start
         self.max_stack = 0
@@ -19,8 +20,8 @@ class DFS:        #depth first search
     def search(self,g):    
         if self.current == self.goal:
             print('done',self.goal)
-            if len(self.goal_list) > 0:
-                self.goal = self.goal_list.pop(0)
+            if len(self.g_temp) > 0:
+                self.goal = self.g_temp.pop(0)
                 self.visited = []
                 self.path = []
             else:
@@ -38,7 +39,9 @@ class DFS:        #depth first search
             self.current = self.stack.pop()
             if not self.done:
                 self.path.append(self.current)
-    
+
+    def pause(self):
+        self.running = not self.running
 
     def get_pos(self):
         return {'walk':[self.current],'goal':[self.goal]}
@@ -54,3 +57,16 @@ class DFS:        #depth first search
 
     def is_pause(self):
         return self.running
+
+    
+
+    def reset(self):
+        self.running = False  # initial with running state
+        self.done = False #for tell whether search is done
+        self.g_temp = self.goal_list
+        self.stack = [] #!!!so fucking necessary
+        self.current = self.start
+        self.max_stack = 0
+        self.path = [self.start]  #in case of highlighting word
+        self.visited = []
+        

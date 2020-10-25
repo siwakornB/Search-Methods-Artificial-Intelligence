@@ -74,9 +74,9 @@ def main():
             pg.draw.rect(SCREEN, LIGHTGRAY, rect)
         pos_list=dfs.get_pos()
         #path
-        for p in dfs.get_path():
-            rect = pg.Rect((p[0]*blockSize+blockSize+5,p[1]*blockSize+blockSize+5),
-                    (blockSize-10, blockSize-10))
+        for i,p in enumerate(dfs.get_path()[-10:]):
+            rect = pg.Rect((p[0]*blockSize+blockSize+5+(7-i),p[1]*blockSize+blockSize+5+(7-i)),
+                    (blockSize-10-(8-i),blockSize-10-(8-i)))
             pg.draw.rect(SCREEN, GREEN, rect)
         
         #for walker
@@ -105,7 +105,7 @@ def main():
     while GAME:
         CLOCK.tick(FPS)
         t1 = pg.time.get_ticks() - timer
-        if t1 > 10 and not dfs.is_done() and not dfs.is_pause():
+        if t1 > 10 and not dfs.is_done() and dfs.is_pause():
             timer = pg.time.get_ticks()
             dfs.search(grid)
         draw()
@@ -120,19 +120,17 @@ def main():
                             print("------------------------START----------------------------")
                             StartResetButton_status = not StartResetButton_status
                             BState = 'RESET'
+                            dfs.pause()
                         else:
                             print("------------------------RESET----------------------------")
                             StartResetButton_status = not StartResetButton_status
                             BState = 'START'
+                            dfs.reset()
                     
                     #color = color_active if active else color_inactive
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
-                    pass
-
-
-
-
+                    dfs.pause()
 
 
 main()
