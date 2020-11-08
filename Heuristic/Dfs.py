@@ -17,6 +17,9 @@ class DFS:        #depth first search
         self.path = [start]  #in case of highlighting word
         self.visited = []
 
+        self.time_consumption = 0
+        self.max_mem = 0
+
     def search(self,g):    
         if self.current == self.goal:
             print('done',self.goal)
