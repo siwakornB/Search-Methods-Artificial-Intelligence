@@ -24,7 +24,7 @@ class A_Star:
         self.time_consumption = 0
         self.max_mem = 0
 
-    def search(self):
+    def search(self,g):
         # Loop until the open list is empty
         while len(open) > 0:
             # Sort the open list to get the node with the lowest cost first
@@ -32,40 +32,38 @@ class A_Star:
             # Get the node with the lowest cost
             self.current_node = self.open.pop(0)
             # Add the current node to the closed list
-            self.closed.append(current_node)
+            self.closed.append(self.current_node)
             
             # Check if we have reached the goal, return the path
-            if current_node == goal_node:
+            if self.current_node.position == self.goal.position:
                 path = []
-                while current_node != start_node:
-                    path.append(current_node.position)
-                    current_node = current_node.parent
-                #path.append(start) 
+                while self.current_node != self.start:
+                    path.append(self.current_node.position)
+                    self.current_node = self.current_node.parent
                 # Return reversed path
                 return path[::-1]
-            # Unzip the current node position
-            (x, y) = current_node.position
             # Get neighbors
-            neighbors = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
+            neighbors = g.find_neighbors(self.current_node)
             # Loop neighbors
             for next in neighbors:
-                # Get value from map
-                map_value = map.get(next)
-                # Check if the node is a wall
-                if(map_value == '#'):
-                    continue
                 # Create a neighbor node
-                neighbor = Node(next, current_node)
+                neighbor = Node(next, self.current_node)
                 # Check if the neighbor is in the closed list
-                if(neighbor in closed):
+                if(neighbor in self.closed):
                     continue
                 # Generate heuristics (Manhattan distance)
-                neighbor.g = abs(neighbor.position[0] - start_node.position[0]) + abs(neighbor.position[1] - start_node.position[1])
-                neighbor.h = abs(neighbor.position[0] - goal_node.position[0]) + abs(neighbor.position[1] - goal_node.position[1])
+                neighbor.g = abs(neighbor.position[0] - self.start.position[0]) + abs(neighbor.position[1] - self.start.position[1])
+                neighbor.h = abs(neighbor.position[0] - self.goal.position[0]) + abs(neighbor.position[1] - self.goal.position[1])
                 neighbor.f = neighbor.g + neighbor.h
                 # Check if neighbor is in open list and if it has a lower f value
-                if(add_to_open(open, neighbor) == True):
+                if self.check(neighbor):
                     # Everything is green, add neighbor to open list
-                    open.append(neighbor)
+                    self.open.append(neighbor)
         # Return None, no path is found
         return None
+
+    def check(self, neighbor):
+        for node in self.open:
+            if (neighbor.position == node.position and neighbor.f >= node.f):
+                return False
+        return True

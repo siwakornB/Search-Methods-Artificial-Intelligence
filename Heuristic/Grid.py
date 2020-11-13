@@ -36,7 +36,7 @@ class Grid:
             pg.draw.rect(SCREEN, (200,200,200), rect)
 
 class Node:
-    def __init__(self,position,parent):
+    def __init__(self,position,parent = None):
         self.position = position
         self.parent = parent
         self.g = 0 # Distance to start node
