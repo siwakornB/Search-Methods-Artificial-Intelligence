@@ -26,7 +26,7 @@ class A_Star:
 
     def search(self,g):
         # Loop until the open list is empty
-        while len(open) > 0:
+        if len(self.open) > 0:
             # Sort the open list to get the node with the lowest cost first
             self.open.sort()
             # Get the node with the lowest cost
@@ -35,7 +35,8 @@ class A_Star:
             self.closed.append(self.current_node)
             
             # Check if we have reached the goal, return the path
-            if self.current_node.position == self.goal.position:
+            #print(self.current_node.position,self.goal)
+            if self.current_node.position == self.goal:
                 path = []
                 while self.current_node != self.start:
                     path.append(self.current_node.position)
@@ -43,9 +44,10 @@ class A_Star:
                 # Return reversed path
                 return path[::-1]
             # Get neighbors
-            neighbors = g.find_neighbors(self.current_node)
+            neighbors = g.find_neighbors(self.current_node.position)
             # Loop neighbors
             for next in neighbors:
+                print(next)
                 # Create a neighbor node
                 neighbor = Node(next, self.current_node)
                 # Check if the neighbor is in the closed list
@@ -53,17 +55,29 @@ class A_Star:
                     continue
                 # Generate heuristics (Manhattan distance)
                 neighbor.g = abs(neighbor.position[0] - self.start.position[0]) + abs(neighbor.position[1] - self.start.position[1])
-                neighbor.h = abs(neighbor.position[0] - self.goal.position[0]) + abs(neighbor.position[1] - self.goal.position[1])
+                neighbor.h = abs(neighbor.position[0] - self.goal[0]) + abs(neighbor.position[1] - self.goal[1])
                 neighbor.f = neighbor.g + neighbor.h
                 # Check if neighbor is in open list and if it has a lower f value
                 if self.check(neighbor):
                     # Everything is green, add neighbor to open list
                     self.open.append(neighbor)
         # Return None, no path is found
-        return None
+        #return None
 
     def check(self, neighbor):
         for node in self.open:
             if (neighbor.position == node.position and neighbor.f >= node.f):
                 return False
         return True
+
+    def pause(self):
+        self.running = not self.running
+
+    def get_pos(self):
+        return {'walk':[self.current_node.position],'goal':[self.goal]}
+
+    def is_done(self):
+        return self.done
+
+    def is_pause(self):
+        return self.running

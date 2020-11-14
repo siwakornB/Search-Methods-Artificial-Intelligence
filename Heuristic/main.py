@@ -9,7 +9,7 @@ from Dfs import DFS
 #for maze_gen
 #from maze_generator import*
 from Grid import *
-from A-star import *
+from A_star import A_Star
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -90,6 +90,16 @@ def main():
                 rect = pg.Rect((pos[0]*blockSize+blockSize+2,pos[1]*blockSize+blockSize+2),
                     (blockSize-4, blockSize-4))
                 pg.draw.rect(SCREEN, color, rect)
+        pos_list=a_s.get_pos()
+        for key in pos_list:
+            if key == 'walk':
+                color = BLUE
+            else:
+                color = RED
+            for pos in pos_list[key]:
+                rect = pg.Rect((pos[0]*blockSize+blockSize+902,pos[1]*blockSize+blockSize+2),
+                    (blockSize-4, blockSize-4))
+                pg.draw.rect(SCREEN, color, rect)
         
         #game button
         pg.draw.rect(SCREEN, (255, 255, 0), StartResetButton)
@@ -101,14 +111,19 @@ def main():
         
     #####################################################
     dfs = DFS([0,0],[[19,19],[10,10],[3,2]])
-    a-s = A-star([0,0],[[19,19],[10,10],[3,2]])
+    a_s = A_Star([0,0],[[19,19],[10,10],[3,2]])
     timer = pg.time.get_ticks()
+    timer2 = pg.time.get_ticks()
     while GAME:
         CLOCK.tick(FPS)
         t1 = pg.time.get_ticks() - timer
+        t2 = pg.time.get_ticks() - timer2
         if t1 > 10 and not dfs.is_done() and dfs.is_pause():
             timer = pg.time.get_ticks()
             dfs.search(grid)
+        if t2 > 10 and not a_s.is_done() and a_s.is_pause():
+            timer2 = pg.time.get_ticks()
+            a_s.search(grid)
         draw()
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -122,6 +137,7 @@ def main():
                             StartResetButton_status = not StartResetButton_status
                             BState = 'RESET'
                             dfs.pause()
+                            a_s.pause()
                         else:
                             print("------------------------RESET----------------------------")
                             StartResetButton_status = not StartResetButton_status
@@ -132,6 +148,7 @@ def main():
             elif event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
                     dfs.pause()
+                    a_s.pause()
 
 
 def test():
