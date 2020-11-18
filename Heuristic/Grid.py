@@ -49,7 +49,6 @@ class Node:
     # Sort nodes
     def __lt__(self, other):
          return self.f < other.f
-
     # Print node
     def __repr__(self):
         return ('({0},{1})'.format(self.position, self.f))

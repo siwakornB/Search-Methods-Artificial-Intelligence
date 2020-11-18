@@ -24,7 +24,7 @@ DIMWHITE = (200,200,200)
 
 WIDTH,HEIGHT = 1366,768
 SCREEN = pg.display.set_mode((WIDTH,HEIGHT))
-pg.display.set_caption("Running in 90's")
+pg.display.set_caption("DFS vs A Star")
 blockSize = 20
 walls = [(10, 7), (11, 7), (12, 7), (13, 7), (14, 7), (15, 7), (16, 7), (7, 7), (6, 7), (5, 7), (5, 5),(5, 6), (1, 6),
      (2, 6), (3, 6), (5, 10), (5, 11), (5, 12), (5, 9), (5, 8), (12, 8),(12, 9), (12, 10), (12, 11), (15, 14), (15, 13), (15, 12),
@@ -72,7 +72,11 @@ def main():
             rect = pg.Rect((v[0]*blockSize+blockSize+2,v[1]*blockSize+blockSize+2),
                     (blockSize-4, blockSize-4))
             pg.draw.rect(SCREEN, LIGHTGRAY, rect)
-        pos_list=dfs.get_pos()
+        for v in a_s.get_closed():
+            #print(v)
+            rect = pg.Rect((v[0]*blockSize+blockSize+902,v[1]*blockSize+blockSize+2),
+                    (blockSize-4, blockSize-4))
+            pg.draw.rect(SCREEN, LIGHTGRAY, rect)
         #path
         for i,p in enumerate(dfs.get_path()[-10:]):
             rect = pg.Rect((p[0]*blockSize+blockSize+5+(7-i),p[1]*blockSize+blockSize+5+(7-i)),
@@ -111,7 +115,7 @@ def main():
         
     #####################################################
     dfs = DFS([0,0],[[19,19],[10,10],[3,2]])
-    a_s = A_Star([0,0],[[19,19],[10,10],[3,2]])
+    a_s = A_Star([0,0],[[19,19],[10,10],[3,2]],grid)
     timer = pg.time.get_ticks()
     timer2 = pg.time.get_ticks()
     while GAME:
@@ -143,6 +147,7 @@ def main():
                             StartResetButton_status = not StartResetButton_status
                             BState = 'START'
                             dfs.reset()
+                            a_s.reset()
                     
                     #color = color_active if active else color_inactive
             elif event.type == pg.KEYDOWN:
