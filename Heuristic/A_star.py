@@ -84,7 +84,6 @@ class A_Star:
 
     # A* search
     def astar_search(self,start, end,g):
-        print('start')
         # Create lists for open nodes and closed nodes
         open = []
         closed = []

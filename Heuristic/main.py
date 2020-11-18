@@ -114,8 +114,10 @@ def main():
     
         
     #####################################################
-    dfs = DFS([0,0],[[19,19],[10,10],[3,2]])
-    a_s = A_Star([0,0],[[19,19],[10,10],[3,2]],grid)
+    start = [0,0]
+    goal = [[19,19],[10,10],[3,2]]
+    dfs = DFS(start,goal,grid)
+    a_s = A_Star(start,goal,grid)
     timer = pg.time.get_ticks()
     timer2 = pg.time.get_ticks()
     while GAME:
