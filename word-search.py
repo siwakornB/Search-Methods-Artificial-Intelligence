@@ -283,7 +283,7 @@ class IDDFS():  # iterative deepening depth first search
 
     def search(self):
         # print('temp',self.temp_level,'max',self.max_level)
-
+        print(self.words)
         # print(self.directory[self.dir])
         self.string = self.string + table[self.row][self.column]
         # print(self.string)
